@@ -1,6 +1,6 @@
 Journal Articles 
 
-Corina Rich 
+Corina 
 
 https://luna.gale.com/imgsrv/FastFetch/UBER1/T1JamsBrVTXKRt3PBoGdMh6rpoImW8q3%2FssnPZZXTzwbdf4bX7VwQV%2BStTp7tf27nzCWY1bY5g0HpUA4Zx63GctMTtKHlAq51Wp2FlcNeHEHl%2FO%2FIKoWeE3AeqQAXMn10QMEzPklAhQJtArt8MDtqTMMqHvC35YckaJ1t%2BHCeWzXHNSTAc%2B9GscvaHCYeDwAmpYFhq8QQILFIDc9j0MSl1uXWwMLleYGagJVaIE7QWY2Z%2BuX0pDC8NEs9z1QbSB22ovmnIWRMceZ6pSTHWIhRM%2B55a5xmMUcWT6PaIQM5bJVzCykrgA4kVn9fJ5QgxyjYFv6zP3diF5TRJKqoAgH%2Bw%3D%3D?dl=Analysis_of_the_10day_ultramar.PDF
 
