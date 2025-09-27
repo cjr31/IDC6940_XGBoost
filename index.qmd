@@ -1,7 +1,7 @@
 ---
-title: "Writing a great story for data science projects - Fall 2025 "
-subtitle: "This is a Report Template Quarto"
-author: "Student Name (Advisor: Dr. Cohen)"
+title: "Using XGBoost in Mental Disorder Classification"
+subtitle: "Fall 2025"
+author: "Aabiya Mansoor, Abigail Penza Jackson, Corina Rich, Madelyn Champion (Advisor: Dr. Cohen)"
 date: '`r Sys.Date()`'
 format:
   html:
