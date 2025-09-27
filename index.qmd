@@ -5,6 +5,7 @@ author: "Aabiya Mansoor, Abigail Penza Jackson, Corina Rich, Madelyn Champion (A
 date: '`r Sys.Date()`'
 format:
   html:
+    theme: lux
     code-fold: true
 course: Capstone Projects in Data Science
 bibliography: references.bib # file contains bibtex for references
