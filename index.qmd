@@ -40,24 +40,6 @@ This research applies the power of XGBoost to address the significant and growin
 The selection of XGBoost for this complex classification problem, containing information of 120 patients associated with 17 symptoms, is particularly strategic. The dataset consists of tabular survey responses, where the relationships between different answers (features) and the final diagnosis are complex and non-linear. XGBoost excels at identifying these intricate patterns in structured data. Its ability to perform feature importance ranking will also help in understanding which survey questions are most predictive of a specific mental health condition. Furthermore, XGBoost's built-in regularization is crucial for preventing the model from overfitting to the training data, ensuring it can generalize accurately to new, unseen patient cases. These features make XGBoost an exceptionally suitable framework for the nuanced task of classifying mental health disorders based on categorical survey data.
 
 
-Example of writing including citing references:
-
-*This is an introduction to ..... regression, which is a non-parametric
-estimator that estimates the conditional expectation of two variables
-which is random. The goal of a kernel regression is to discover the
-non-linear relationship between two random variables. To discover the
-non-linear relationship, kernel estimator or kernel smoothing is the
-main method to estimate the curve for non-parametric statistics. In
-kernel estimator, weight function is known as kernel function
-[@efr2008]. Cite this paper [@bro2014principal]. The GEE [@wang2014].
-The PCA [@daffertshofer2004pca]*. Topology can be used in machine
-learning [@adams2021topology]
-
-For Symbolic Regression [@wang2019symbolic] *This is my work and I want
-to add more work...*
-
-Cite new paper [@su2012linear]
-
 ## Methods
 
 -   Detail the models or algorithms used.
