@@ -150,6 +150,8 @@ kable(table1, format = "html", table.attr = "style='width:100%;'")  # for HTML o
 
 ```
 
+##### Initial Data Exploration
+
 ```{r}
 #| include: false
 
@@ -212,6 +214,8 @@ for (col in categorical_cols) {
 }
 ```
 
+The data appears to be noramlly distributed across the different variables and features.
+
 ```{r}
 #| include: false
 # Separate target variable
@@ -257,6 +261,31 @@ ggplot(cramers_df, aes(x = reorder(Variable, CramersV), y = CramersV)) +
   theme_minimal()
 
 ```
+Using Cramer's V we are able to see that mood swings and suicidal thoughs have the highest correlation to the mental health diagnosis. 
+
+##### Data Transformation & Cleaning 
+To facilitate analysis, all categorical variables in the dataset were transformed into numerical or grouped categorical formats. The transformations were applied as follows:
+
+* **Ordinal Frequency Responses** (e.g., *Sadness*, *Euphoric*, *Exhausted*):
+
+  * *Seldom* → 1
+  * *Sometimes* → 2
+  * *Usually* → 3
+  * *Most-Often* → 4
+
+* **Binary Responses** (e.g., *Suicidal Thoughts*, *Mood Swing*):
+
+  * *Yes* → 1
+  * *No* → 0
+
+* **Scaled Ratings (1–10)** (e.g., *Sexual Activity*, *Optimism*):
+  These were grouped into three categorical levels to simplify analysis:
+
+  * Ratings **1–3** → *Category 1*
+  * Ratings **4–6** → *Category 2*
+  * Ratings **7–9** → *Category 3*
+
+These transformations standardized the dataset, allowing for easier correlation analysis, visualizations, and model input compatibility.
 
 
 ### Modeling and Results
