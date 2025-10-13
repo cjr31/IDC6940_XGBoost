@@ -150,6 +150,90 @@ kable(table1, format = "html", table.attr = "style='width:100%;'")  # for HTML o
 
 ```
 
+```{r}
+#| include: false
+
+# Set CRAN mirror explicitly
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+
+# Install missing packages only
+required_packages <- c("xgboost", "DataExplorer", "tidyverse", "ggplot2", "dplyr")
+
+for (pkg in required_packages) {
+  if (!requireNamespace(pkg, quietly = TRUE)) {
+    install.packages(pkg, dependencies = TRUE)
+  }
+}
+
+# Load libraries
+library(tidyverse)
+library(xgboost)
+library(ggplot2)
+library(DataExplorer)
+library(dplyr)
+
+```
+
+
+```{r}
+#| include: false
+#Read Data
+data <- read.csv("Dataset-Mental-Disorders.csv", stringsAsFactors = FALSE)
+
+```
+
+```{r}
+#| eval: false
+#| include: false
+library(tidyr)
+
+
+# Drop Patient Number column 
+data <- data %>% select(-`Patient.Number`)
+
+
+# Confirm all categorical
+categorical_cols <- names(data)
+
+# Plot each categorical column as bar chart
+for (col in categorical_cols) {
+  p <- ggplot(data, aes_string(x = col)) +
+    geom_bar(fill = "steelblue") +
+    labs(
+      title = paste("Class Distribution of", col),
+      x = col,
+      y = "Count"
+    ) +
+    theme_minimal(base_size = 13) +
+    theme(
+      plot.title = element_text(face = "bold", hjust = 0.5),
+      axis.text.x = element_text(angle = 45, hjust = 1)
+    )
+  print(p)
+}
+```
+
+```{r}
+# Separate target variable
+target <- data$Expert.Diagnose
+
+# Drop target from the features dataset
+features <- data %>% select(-"Expert.Diagnose")
+
+# Install needed package
+install.packages("vcd", dependencies = TRUE)
+library(vcd)
+
+# Compute Cramer's V for each feature against the target
+cramers_v <- sapply(names(features), function(col) {
+  tbl <- table(features[[col]], target)
+  assocstats(tbl)$cramer
+})
+
+# Display results
+cramers_v <- sort(cramers_v, decreasing = TRUE)
+cramers_v
+```
 
 
 ### Modeling and Results
