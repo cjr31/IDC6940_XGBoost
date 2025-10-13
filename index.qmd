@@ -85,13 +85,71 @@ $$
 
 ### Data Exploration and Visualization
 
--   Describe your data sources and collection process.
+The dataset used for this analysis was sourced from Kaggle and originates from a private psychologist's office, capturing patient data collected throughout 2023. It includes information on 120 individuals who were assessed for mental health conditions. Each patient was diagnosed with one of four possible mental health statuses: normal, bipolar type I, bipolar type II, or depression. The dataset contains 17 variables that were used to inform the diagnostic process, potentially covering a range of clinical, behavioral, and demographic factors. These variables form the basis for classification and analysis of the mental health conditions represented. Table 1 provides a detailed overview of each variable included in the dataset, offering insight into the features considered during the diagnostic evaluation.
 
--   Present initial findings and insights through visualizations.
+```{r}
+# Create Table 1: Variable Names and Descriptions
 
--   Highlight unexpected patterns or anomalies.
+# Define variables and descriptions
+variables <- c(
+  "Patient Number",
+  "Sadness",
+  "Euphoric",
+  "Exhausted",
+  "Sleep Disorder",
+  "Mood Swing",
+  "Suicidal Thoughts",
+  "Anorexia",
+  "Authority Respect",
+  "Try-Explanation",
+  "Aggressive Response",
+  "Ignore & Move-On",
+  "Nervous Breakdown",
+  "Admit Mistakes",
+  "Overthinking",
+  "Sexual Activity",
+  "Concentration",
+  "Optimism",
+  "Expert Diagnose"
+)
 
-A study was conducted to determine how...
+descriptions <- c(
+  "Unique identifier for each patient.",
+  "How often the patient experiences sadness determined by 4 groupings (Seldom, Sometimes, Usually, Most-Often).",
+  "How often the patient experiences a euphoric mood determined by 4 groupings (Seldom, Sometimes, Usually, Most-Often).",
+  "How often the patient experiences feelings of physical or mental fatigue determined by 4 groupings (Seldom, Sometimes, Usually, Most-Often).",
+  "How often the patient experiences presence and severity of sleep-related disturbances determined by 4 groupings (Seldom, Sometimes, Usually, Most-Often).",
+  "If the patient emotional mood swings (Yes/No) response.",
+  "If the patient has suicidal ideation (Yes/No) response.",
+  "If the patient has indicators of disordered eating or significant weight loss (Yes/No) response.",
+  "If the patient respects authority and rules (Yes/No) response.",
+  "If the patient tries to explain their behavior or symptoms (Yes/No) response.",
+  "If the patient has a tendency to respond to situations with aggression (Yes/No) response.",
+  "If the patient has a tendency to dismiss issues and move forward without resolution (Yes/No) response.",
+  "If the patient has incidences of emotional or psychological breakdowns (Yes/No) response.",
+  "If the patient has a willingness to admit personal faults or mistakes (Yes/No) response.",
+  "If the patient has a tendency to ruminate or overanalyze situations (Yes/No) response.",
+  "Level of sexual interest or activity, ranked from 1 to 10.",
+  "Ability to focus and maintain attention, ranked from 1 to 10.",
+  "General outlook on life and future events ranked from 1 to 10.",
+  "Final clinical diagnosis assigned by the expert (Normal, Bipolar I, Bipolar II, Depression)."
+)
+
+# Create data frame
+table1 <- data.frame(
+  Variable = variables,
+  Description = descriptions,
+  stringsAsFactors = FALSE
+)
+
+# Print Table 1
+library(knitr)
+
+kable(table1, format = "html", table.attr = "style='width:100%;'")  # for HTML output
+
+
+```
+
 
 ```{r, warning=FALSE, echo=T, message=FALSE}
 # loading packages 
