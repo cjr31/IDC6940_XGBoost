@@ -183,8 +183,7 @@ data <- read.csv("Dataset-Mental-Disorders.csv", stringsAsFactors = FALSE)
 ```
 
 ```{r}
-#| eval: false
-#| include: false
+#| echo: true
 library(tidyr)
 
 
@@ -198,7 +197,7 @@ categorical_cols <- names(data)
 # Plot each categorical column as bar chart
 for (col in categorical_cols) {
   p <- ggplot(data, aes_string(x = col)) +
-    geom_bar(fill = "steelblue") +
+    geom_bar(fill = "Purple") +
     labs(
       title = paste("Class Distribution of", col),
       x = col,
