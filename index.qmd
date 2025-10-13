@@ -85,7 +85,7 @@ $$
 
 ### Data Exploration and Visualization
 
-The dataset used for this analysis was sourced from Kaggle and originates from a private psychologist's office, capturing patient data collected throughout 2023. It includes information on 120 individuals who were assessed for mental health conditions. Each patient was diagnosed with one of four possible mental health statuses: normal, bipolar type I, bipolar type II, or depression. The dataset contains 17 variables that were used to inform the diagnostic process, potentially covering a range of clinical, behavioral, and demographic factors. These variables form the basis for classification and analysis of the mental health conditions represented. Table 1 provides a detailed overview of each variable included in the dataset, offering insight into the features considered during the diagnostic evaluation.
+The dataset used for this analysis was sourced from Kaggle (https://www.kaggle.com/datasets/cid007/mental-disorder-classification) and originates from a private psychologist's office, capturing patient data collected throughout 2023. It includes information on 120 individuals who were assessed for mental health conditions. Each patient was diagnosed with one of four possible mental health statuses: normal, bipolar type I, bipolar type II, or depression. The dataset contains 17 variables that were used to inform the diagnostic process, potentially covering a range of clinical, behavioral, and demographic factors. These variables form the basis for classification and analysis of the mental health conditions represented. Table 1 provides a detailed overview of each variable included in the dataset, offering insight into the features considered during the diagnostic evaluation.
 
 ```{r}
 # Create Table 1: Variable Names and Descriptions
@@ -151,38 +151,6 @@ kable(table1, format = "html", table.attr = "style='width:100%;'")  # for HTML o
 ```
 
 
-```{r, warning=FALSE, echo=T, message=FALSE}
-# loading packages 
-library(tidyverse)
-library(knitr)
-library(ggthemes)
-library(ggrepel)
-library(dslabs)
-```
-
-```{python}
-import pandas as pd
-```
-
-```{r, warning=FALSE, echo=TRUE}
-# Load Data
-kable(head(murders))
-
-ggplot1 = murders %>% ggplot(mapping = aes(x=population/10^6, y=total)) 
-
-  ggplot1 + geom_point(aes(col=region), size = 4) +
-  geom_text_repel(aes(label=abb)) +
-  scale_x_log10() +
-  scale_y_log10() +
-  geom_smooth(formula = "y~x", method=lm,se = F)+
-  xlab("Populations in millions (log10 scale)") + 
-  ylab("Total number of murders (log10 scale)") +
-  ggtitle("US Gun Murders in 2010") +
-  scale_color_discrete(name = "Region")+
-      theme_bw()
-  
-
-```
 
 ### Modeling and Results
 
