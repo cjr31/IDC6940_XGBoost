@@ -214,6 +214,7 @@ for (col in categorical_cols) {
 ```
 
 ```{r}
+#| include: false
 # Separate target variable
 target <- data$Expert.Diagnose
 
@@ -233,6 +234,29 @@ cramers_v <- sapply(names(features), function(col) {
 # Display results
 cramers_v <- sort(cramers_v, decreasing = TRUE)
 cramers_v
+```
+
+```{r}
+# Convert to data frame for plotting
+library(ggplot2)
+
+cramers_df <- data.frame(
+  Variable = names(cramers_v),
+  CramersV = cramers_v
+)
+
+# Drop NA values
+cramers_df <- cramers_df[!is.na(cramers_df$CramersV), ]
+
+# Plot
+ggplot(cramers_df, aes(x = reorder(Variable, CramersV), y = CramersV)) +
+  geom_col(fill = "#2c7fb8") +
+  coord_flip() +
+  labs(title = "Cramer's V Association with Mental Health Diagnosis",
+       x = "Feature",
+       y = "Cramer's V") +
+  theme_minimal()
+
 ```
 
 
