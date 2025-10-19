@@ -198,45 +198,82 @@ library(dplyr)
 
 ```
 
-
 ```{r}
-#| include: false
-#Read Data
 data <- read.csv("Dataset-Mental-Disorders.csv", stringsAsFactors = FALSE)
-
-```
-
-```{r}
-#| echo: true
-library(tidyr)
-
-
 # Drop Patient Number column 
 data <- data %>% select(-`Patient.Number`)
+```
 
 
-# Confirm all categorical
-categorical_cols <- names(data)
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
 
-# Plot each categorical column as bar chart
-for (col in categorical_cols) {
-  p <- ggplot(data, aes_string(x = col)) +
-    geom_bar(fill = "Purple") +
-    labs(
-      title = paste("Class Distribution of", col),
-      x = col,
-      y = "Count"
-    ) +
-    theme_minimal(base_size = 13) +
-    theme(
-      plot.title = element_text(face = "bold", hjust = 0.5),
-      axis.text.x = element_text(angle = 45, hjust = 1)
-    )
-  print(p)
-}
+# Define variables to combine
+included_vars <- c("Sexual.Activity", "Concentration", "Optimism")
+
+# Pivot data to longer format for these variables
+long_data <- data %>%
+  select(all_of(included_vars)) %>%
+  pivot_longer(cols = everything(), names_to = "Variable", values_to = "Response")
+
+# Plot grouped bar chart
+ggplot(long_data, aes(x = Response, fill = Variable)) +
+  geom_bar(position = "dodge") +  # dodge = side-by-side bars
+  labs(
+    title = "Response Distribution for Sexual Activity, Concentration, and Optimism",
+    x = "Response",
+    y = "Count",
+    fill = "Variable"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
 ```
 
 The data appears to be noramlly distributed across the different variables and features.
+
+```{r}
+#| echo: false
+library(dplyr)
+library(tidyr)
+library(knitr)
+library(kableExtra)
+
+# List of variables to exclude
+excluded_vars <- c("Sexual.Activity", "Concentration", "Optimism")
+
+# Create distribution table, excluding the listed variables
+distribution_table <- data %>%
+  select(-all_of(excluded_vars)) %>%
+  pivot_longer(cols = everything(), names_to = "Variable", values_to = "Value") %>%
+  group_by(Variable, Value) %>%
+  summarise(Count = n(), .groups = "drop") %>%
+  arrange(Variable, desc(Count)) %>%
+  group_by(Variable) %>%
+  summarise(Distribution = paste(Value, Count, sep = ": ", collapse = ", "), .groups = "drop")
+
+# Format nicely
+distribution_table %>%
+  kbl(
+    caption = "Category Distributions per Categorical Variable",
+    align = c("l", "l"),
+    col.names = c("Variable", "Category Distribution"),
+    escape = FALSE  # Corrected from earlier error
+  ) %>%
+  kable_styling(
+    full_width = FALSE,
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    position = "center"
+  ) %>%
+  column_spec(2, width = "40em")
+```
+
+
 
 
 ```{r}
