@@ -348,6 +348,76 @@ To facilitate analysis, all categorical variables in the dataset were transforme
 
 These transformations standardized the dataset, allowing for easier correlation analysis, visualizations, and model input compatibility.
 
+```{r}
+#| include: false
+datat <- read.csv("Transformed Dataset.csv", stringsAsFactors = FALSE)
+```
+
+```{r}
+#| eval: false
+#| include: false
+# Load libraries
+library(ggplot2)
+library(reshape2)
+
+# Exclude categorical variables
+numeric_data <- datat[, !(names(datat) %in% c("Sexual.Activity", "Optimism", "Concentration"))]
+
+# Ensure remaining variables are numeric
+numeric_data <- numeric_data[, sapply(numeric_data, is.numeric)]
+
+# Compute correlation matrix
+cor_matrix <- cor(numeric_data, use = "complete.obs")
+
+# Melt the matrix for plotting
+melted_cor <- melt(cor_matrix)
+
+# Create heatmap
+ggplot(data = melted_cor, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient2(low = "red", mid = "yellow", high = "green", 
+                       midpoint = 0, limit = c(-1, 1), name = "Correlation") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+  coord_fixed() +
+  labs(title = "Correlation Matrix Heatmap", x = "", y = "")
+
+```
+```{r}
+#| include: false
+# Install packages
+install.packages("FSelectorRcpp")
+install.packages("ggplot2")
+
+# Load libraries
+library(FSelectorRcpp)
+library(ggplot2)
+
+```
+
+```{r}
+# Compute Information Gain
+info_gain <- information_gain(Expert.Diagnose ~ ., data = datat)
+
+# View result in table form (sorted by importance)
+info_gain_sorted <- info_gain[order(-info_gain$importance), ]
+print(info_gain_sorted)
+
+```
+
+```{r}
+# Plot using ggplot2
+ggplot(info_gain_sorted, aes(x = reorder(attributes, importance), y = importance)) +
+  geom_bar(stat = "identity", fill = "forestgreen") +
+  coord_flip() +
+  labs(title = "Information Gain by Variable",
+       x = "Variable",
+       y = "Information Gain") +
+  theme_minimal()
+
+```
+
+Using information gain on the transformed dataset, mood swings and optimism provide the highest information gain. 
 
 ### Modeling and Results
 
