@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aabiya Mansoor, Abigail Penza Jackson, Corina Rich, Madelyn Champion (Advisor: Dr. Cohen)">
-<meta name="dcterms.date" content="2025-10-13">
+<meta name="dcterms.date" content="2025-10-19">
 
 <title>Using XGBoost in Mental Disorder Classification</title>
 <style>
@@ -3263,7 +3263,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">October 13, 2025</p>
+      <p class="date">October 19, 2025</p>
     </div>
   </div>
   
@@ -3297,18 +3297,42 @@ window.Quarto = {
 </section>
 <section id="methods" class="level2">
 <h2 class="anchored" data-anchor-id="methods">Methods</h2>
-<ul>
-<li><p>Detail the models or algorithms used.</p></li>
-<li><p>Justify your choices based on the problem and data.</p></li>
-</ul>
-<p><em>The common non-parametric regression model is</em> <span class="math inline">\(Y_i = m(X_i) + \varepsilon_i\)</span><em>, where</em> <span class="math inline">\(Y_i\)</span> <em>can be defined as the sum of the regression function value</em> <span class="math inline">\(m(x)\)</span> <em>for</em> <span class="math inline">\(X_i\)</span><em>. Here</em> <span class="math inline">\(m(x)\)</span> <em>is unknown and</em> <span class="math inline">\(\varepsilon_i\)</span> <em>some errors. With the help of this definition, we can create the estimation for local averaging i.e.</em> <span class="math inline">\(m(x)\)</span> <em>can be estimated with the product of</em> <span class="math inline">\(Y_i\)</span> <em>average and</em> <span class="math inline">\(X_i\)</span> <em>is near to</em> <span class="math inline">\(x\)</span><em>. In other words, this means that we are discovering the line through the data points with the help of surrounding data points. The estimation formula is printed below <span class="citation" data-cites="R-base">(<a href="#ref-R-base" role="doc-biblioref"><strong>R-base?</strong></a>)</span>:</em></p>
+<section id="extreme-gradient-boosting-xgboost-model" class="level3">
+<h3 class="anchored" data-anchor-id="extreme-gradient-boosting-xgboost-model">eXtreme Gradient Boosting (XGBoost) Model</h3>
+<p>The eXtreme Gradient Boosting (XGBoost) algorithm is a powerful ensemble learning method based on gradient-boosted decision trees. It builds an additive model in a forward stage-wise manner, where each new tree is trained to predict the residual errors of the ensemble built thus far. This iterative process allows the model to capture complex, non-linear relationships and interactions between features—in this case, across the 17 variables in the dataset.</p>
+<p>XGBoost optimizes a regularized objective function that balances model accuracy with complexity, thereby reducing the risk of overfitting. The general form of the objective function is:</p>
 <p><span class="math display">\[
-M_n(x) = \sum_{i=1}^{n} W_n (X_i) Y_i  \tag{1}
-\]</span><span class="math inline">\(W_n(x)\)</span> <em>is the sum of weights that belongs to all real numbers. Weights are positive numbers and small if</em> <span class="math inline">\(X_i\)</span> <em>is far from</em> <span class="math inline">\(x\)</span><em>.</em></p>
-<p><em>Another equation:</em></p>
-<p><span class="math display">\[
-y_i = \beta_0 + \beta_1 X_1 +\varepsilon_i
+\text{Obj} = \sum_{i=1}^{n} L(y_i, \hat{y}_i) + \sum_{k=1}^{K} \Omega(f_k)
 \]</span></p>
+<p>Where:</p>
+<ul>
+<li>The <strong>loss function</strong> measures the difference between the predicted and actual values:</li>
+</ul>
+<p><span class="math display">\[
+L(y_i, \hat{y}_i) = (y_i - \hat{y}_i)^2
+\]</span></p>
+<ul>
+<li>The <strong>regularization term</strong> penalizes the complexity of each tree:</li>
+</ul>
+<p><span class="math display">\[
+\Omega(f_k) = \gamma T + \frac{1}{2} \lambda \sum_{j=1}^{T} w_j^2
+\]</span></p>
+<p>Here:</p>
+<p><span class="math display">\[
+T = \text{number of leaves in the tree}
+\]</span></p>
+<p><span class="math display">\[
+w_j = \text{score (weight) on leaf } j
+\]</span></p>
+<p><span class="math display">\[
+\gamma = \text{penalty for adding a new leaf}
+\]</span></p>
+<p><span class="math display">\[
+\lambda = \text{L2 regularization term on leaf weights}
+\]</span></p>
+<p>Gradient descent is used to minimize this objective function by updating model parameters iteratively. The regularization components play a key role in controlling tree complexity, helping prevent overfitting—especially in high-dimensional or noisy datasets.</p>
+<p>Hyperparameters such as the learning rate, maximum tree depth, regularization strength, and subsampling ratio are typically tuned via cross-validation to maximize model performance. Due to its efficiency and predictive power, XGBoost is widely used in structured data problems <span class="citation" data-cites="zhang2022imbalanced">(<a href="#ref-zhang2022imbalanced" role="doc-biblioref">Zhang, Jia, and Shang 2022</a>)</span>.</p>
+</section>
 </section>
 <section id="analysis-and-results" class="level2">
 <h2 class="anchored" data-anchor-id="analysis-and-results">Analysis and Results</h2>

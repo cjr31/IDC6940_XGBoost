@@ -56,30 +56,52 @@ Altogether, these findings reinforce XGBoost’s versatility and robustness in h
 
 ## Methods
 
--   Detail the models or algorithms used.
+### eXtreme Gradient Boosting (XGBoost) Model
 
--   Justify your choices based on the problem and data.
+The eXtreme Gradient Boosting (XGBoost) algorithm is a powerful ensemble learning method based on gradient-boosted decision trees. It builds an additive model in a forward stage-wise manner, where each new tree is trained to predict the residual errors of the ensemble built thus far. This iterative process allows the model to capture complex, non-linear relationships and interactions between features—in this case, across the 17 variables in the dataset.
 
-*The common non-parametric regression model is*
-$Y_i = m(X_i) + \varepsilon_i$*, where* $Y_i$ *can be defined as the sum
-of the regression function value* $m(x)$ *for* $X_i$*. Here* $m(x)$ *is
-unknown and* $\varepsilon_i$ *some errors. With the help of this
-definition, we can create the estimation for local averaging i.e.*
-$m(x)$ *can be estimated with the product of* $Y_i$ *average and* $X_i$
-*is near to* $x$*. In other words, this means that we are discovering
-the line through the data points with the help of surrounding data
-points. The estimation formula is printed below [@R-base]:*
+XGBoost optimizes a regularized objective function that balances model accuracy with complexity, thereby reducing the risk of overfitting. The general form of the objective function is:
 
 $$
-M_n(x) = \sum_{i=1}^{n} W_n (X_i) Y_i  \tag{1}
-$$$W_n(x)$ *is the sum of weights that belongs to all real numbers.
-Weights are positive numbers and small if* $X_i$ *is far from* $x$*.*
+\text{Obj} = \sum_{i=1}^{n} L(y_i, \hat{y}_i) + \sum_{k=1}^{K} \Omega(f_k)
+$$
 
-*Another equation:*
+Where:
+
+- The **loss function** measures the difference between the predicted and actual values:
 
 $$
-y_i = \beta_0 + \beta_1 X_1 +\varepsilon_i
+L(y_i, \hat{y}_i) = (y_i - \hat{y}_i)^2
 $$
+
+- The **regularization term** penalizes the complexity of each tree:
+
+$$
+\Omega(f_k) = \gamma T + \frac{1}{2} \lambda \sum_{j=1}^{T} w_j^2
+$$
+
+Here:
+
+$$
+T = \text{number of leaves in the tree}
+$$
+
+$$
+w_j = \text{score (weight) on leaf } j
+$$
+
+$$
+\gamma = \text{penalty for adding a new leaf}
+$$
+
+$$
+\lambda = \text{L2 regularization term on leaf weights}
+$$
+
+Gradient descent is used to minimize this objective function by updating model parameters iteratively. The regularization components play a key role in controlling tree complexity, helping prevent overfitting—especially in high-dimensional or noisy datasets.
+
+Hyperparameters such as the learning rate, maximum tree depth, regularization strength, and subsampling ratio are typically tuned via cross-validation to maximize model performance. Due to its efficiency and predictive power, XGBoost is widely used in structured data problems [@zhang2022imbalanced].
+
 
 ## Analysis and Results
 
@@ -215,6 +237,7 @@ for (col in categorical_cols) {
 ```
 
 The data appears to be noramlly distributed across the different variables and features.
+
 
 ```{r}
 #| include: false
