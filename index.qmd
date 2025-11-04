@@ -65,6 +65,7 @@ XGBoost optimizes a regularized objective function that balances model accuracy 
 $$
 \text{Obj} = \sum_{i=1}^{n} L(y_i, \hat{y}_i) + \sum_{k=1}^{K} \Omega(f_k)
 $$
+[@zhang2022imbalanced]
 
 Where:
 
@@ -98,9 +99,24 @@ $$
 \lambda = \text{L2 regularization term on leaf weights}
 $$
 
-Gradient descent is used to minimize this objective function by updating model parameters iteratively. The regularization components play a key role in controlling tree complexity, helping prevent overfitting—especially in high-dimensional or noisy datasets.
+Gradient descent is used to minimize this objective function by updating model parameters iteratively. The regularization components play a key role in controlling tree complexity, helping prevent overfitting, especially in high-dimensional or noisy datasets.
 
 Hyperparameters such as the learning rate, maximum tree depth, regularization strength, and subsampling ratio are typically tuned via cross-validation to maximize model performance. Due to its efficiency and predictive power, XGBoost is widely used in structured data problems [@zhang2022imbalanced].
+
+Figure 1 shows a conceptual graph illustrating the iterative process of XGBoost.
+![XG Boost](XG Boost.png)
+Figure 1 shows the sequential 3-stage process of XGBoost:
+
+Stage 1: Initial Prediction
+The process begins by making a simple first guess, or "base prediction" . This initial model is usually very simple (like the average of all the data). The graph shows this simple model as a flat line that doesn't fit the data points well. The model then calculates the errors, or residuals, which are the differences between this first guess and the actual data points.
+
+Stage 2: Iterative Boosting (Tree k)
+This is the core loop of the algorithm. A new tree is built specifically to predict the errors from the previous stage. The goal of this new tree is to correct the mistakes its predecessor made. It does this by optimizing the objective function, which cleverly balances minimizing the new errors with a penalty for being too complex . This keeps the trees simple and prevents overfitting. The graph shows the loss being reduced as the model learns.
+
+Stage 3: Final Ensemble Prediction
+The final prediction is not just the last tree. Instead, it is the sum of all the individual trees added together (the initial guess + the first correction tree + the second correction tree , and so on). By combining all these simple models, each one correcting the last, the "Final Model" becomes a single, highly accurate predictor that fits the complex patterns in the data much better than any single tree could.
+
+So we can summarize that the XGBoost model starts with a simple guess, then builds a series of new models to fix the errors of the previous ones, and finally, adds all these models up to get a single, strong prediction [@zhang2022imbalanced].
 
 
 ## Analysis and Results
