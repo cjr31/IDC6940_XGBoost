@@ -437,13 +437,13 @@ Using information gain on the transformed dataset, mood swings and optimism prov
 
 ### Modeling and Results
 
--   Explain your data preprocessing and cleaning steps.
+Model Justiication
 
--   Present your key findings in a clear and concise manner.
+Hyper Tuning of the Model
 
--   Use visuals to support your claims.
+Final Model Choice 
 
--   **Tell a story about what the data reveals.**
+Limitations
 
 ```{r}
 
