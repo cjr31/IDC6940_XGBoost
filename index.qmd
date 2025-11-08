@@ -439,6 +439,12 @@ Using information gain on the transformed dataset, mood swings and optimism prov
 
 ##### Overview of XG Boost Modeling Framework
 
+The objective of this analysis is to develop a predictive model for mental health classification using a gradient boosting framework. Extreme Gradient Boosting (XGBoost) was selected for its computational efficiency, strong performance on small structured datasets, and ability to provide interpretable feature insights.
+
+The dataset comprises 120 observations and 17 features, making XGBoost an appropriate choice given its efficiency with limited data. Its tree-based ensemble approach effectively captures nonlinear relationships and complex patterns without requiring the large sample sizes typically needed for deep learning models.
+
+Moreover, XGBoost’s feature importance outputs enhance interpretability, an essential consideration in mental health research, where understanding variable contributions is as valuable as predictive accuracy. Finally, the algorithm’s optimized gradient boosting process allows for rapid experimentation with hyperparameters and validation folds, facilitating efficient model tuning and evaluation.
+
 ##### Model Specification
 
 ##### Hyperparameter Optimization
