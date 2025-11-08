@@ -445,8 +445,6 @@ The dataset comprises 120 observations and 17 features, making XGBoost an approp
 
 Moreover, XGBoost’s feature importance outputs enhance interpretability, an essential consideration in mental health research, where understanding variable contributions is as valuable as predictive accuracy. Finally, the algorithm’s optimized gradient boosting process allows for rapid experimentation with hyperparameters and validation folds, facilitating efficient model tuning and evaluation.
 
-##### Model Specification
-
 ##### Hyperparameter Optimization
 
 ##### Model Evaluation & Performance 
