@@ -104,7 +104,6 @@ Gradient descent is used to minimize this objective function by updating model p
 
 Hyperparameters such as the learning rate, maximum tree depth, regularization strength, and subsampling ratio are typically tuned via cross-validation to maximize model performance. Due to its efficiency and predictive power, XGBoost is widely used in structured data problems [@zhang2022imbalanced].
 
-Figure 1 shows a conceptual graph illustrating the iterative process of XGBoost.
 ![XG Boost](XG Boost.png)
 Figure 1 shows the sequential 3-stage process of XGBoost:
 
@@ -438,13 +437,19 @@ Using information gain on the transformed dataset, mood swings and optimism prov
 
 ### Modeling and Results
 
-Model Justiication
+##### Overview of XG Boost Modeling Framework
 
-Hyper Tuning of the Model
+##### Model Specification
 
-Final Model Choice 
+##### Hyperparameter Optimization
 
-Limitations
+##### Model Evaluation & Performance 
+
+##### Feature Importance & Interepretability
+
+##### Sensitvity & Robustness Analysis
+
+##### Summary of Modeling Results
 
 ```{r}
 
