@@ -337,7 +337,7 @@ where \(\chi^2\) is the chi-squared statistic for the contingency table, \(n\) i
  
 
 ##### Data Transformation & Cleaning 
-To facilitate analysis, all categorical variables in the dataset were transformed into numerical or grouped categorical formats. The transformations were applied as follows:
+To facilitate analysis, all categorical variables in the dataset were transformed into numerical or grouped categorical formats in Excel. The transformations were applied as follows:
 
 * **Ordinal Frequency Responses** (e.g., *Sadness*, *Euphoric*, *Exhausted*):
 
@@ -460,6 +460,8 @@ train_data <- training(data_split)
 test_data  <- testing(data_split)
 ```
 
+The dataset was randomly partitioned into an 80/20 training–testing split, resulting in 96 patient surveys used for model training and 24 surveys reserved for independent testing. The predictive target for all models was the expert clinical diagnosis, which served as the ground-truth reference label.
+
 ```{r}
 # Begin XG Boost
 xgb_recipe <- recipe(Expert.Diagnose ~ ., data = train_data) %>%
@@ -484,6 +486,8 @@ xgb_spec <- boost_tree(
 
 ```
 
+An XGBoost model specification was created using the tidymodels framework with all major hyperparameters set to be tuned, including the number of trees, tree depth, learning rate, loss reduction, minimum node size, subsampling rate, and number of predictors considered at each split. The model was configured to use the “xgboost” engine and trained in classification mode. This specification functions as the template for subsequent hyperparameter optimization within the workflow.
+
 ```{r}
 #Creating Workflow
 xgb_workflow <- workflow() %>%
@@ -496,6 +500,8 @@ xgb_workflow <- workflow() %>%
 set.seed(123)
 folds <- vfold_cv(train_data, v = 5, strata = Expert.Diagnose)
 ```
+
+Five-fold stratified cross-validation was used for hyperparameter tuning. The training dataset was partitioned into five equally sized folds with the class distribution of the outcome variable (Expert Diagnosis) preserved in each fold. For each tuning iteration, models were trained on four folds and validated on the remaining fold, ensuring stable and unbiased performance estimates. A fixed random seed was used to ensure reproducibility of the fold assignments.
 
 ```{r}
 # Hyperparameter grid
@@ -558,6 +564,8 @@ xgb_tune_results <- tune_grid(
 
 ```
 
+Hyperparameter tuning was performed using 5-fold stratified cross-validation with a space-filling grid of 30 candidate parameter combinations. For each combination, models were trained on four folds and evaluated on the fifth, cycling through all folds. Model performance was assessed using accuracy and the area under the ROC curve (ROC AUC). Predictions from each resample were saved to support additional diagnostic analyses. A fixed random seed ensured reproducibility of all results.
+
 ```{r}
 # Visualize tuning results
 autoplot(xgb_tune_results)
@@ -578,7 +586,7 @@ ggplot(tune_df, aes(x = trees, y = mean, color = factor(tree_depth))) +
   theme_minimal()
 
 ```
-
+Visualizing the tuning results revealed clear performance patterns across the explored hyperparameter space. The ROC AUC versus number of trees plot indicated that the optimal tree depth was approximately 2, suggesting that relatively shallow trees generalized best for this dataset. Model performance increased steadily with the number of boosting iterations, with the highest ROC AUC occurring at around 625 trees. At this configuration, the model achieved an accuracy exceeding 0.80 and a ROC AUC greater than 0.90, indicating strong discriminatory performance.
 
 ```{r}
 # Selecting best parameters
@@ -615,7 +623,11 @@ best_params_table %>%
 
 ```
 
+Although visual inspection of the tuning plots provided a general sense of the model’s performance trends, identifying the exact optimal hyperparameters was not straightforward due to interaction effects between parameters and the non-linear nature of boosted tree models. Therefore, the select_best() function from the tidymodels framework was used to systematically extract the hyperparameter combination that achieved the highest ROC AUC across all resampled evaluations.
 
+The resulting optimal configuration included 3 predictors (mtry = 3), 627 boosting iterations, a minimum node size (min_n) of 2, a learning rate of 0.16501, a loss-reduction parameter of 0.0034, and a subsample proportion of 0.5655. This combination represents the tuning grid entry labeled pre0_mod06_post0, which achieved the best balance between model complexity and predictive performance during cross-validation.
+
+This automated selection approach ensures that the final model parameters are chosen objectively based on empirical performance rather than subjective visual interpretation, which can be challenging when multiple hyperparameters interact.
 
 ```{r}
 # Finalize the model with best params
@@ -630,6 +642,7 @@ final_fit <- fit(final_xgb, data = train_data)
 vip(final_fit$fit$fit, geom = "col")
 
 ```
+Using the best parameter fit the has the top five features in order of importance as mood swings, sadness, agressive response, exhausted, and euphoric.
 
 ```{r}
 #Prediction Visualization
@@ -644,6 +657,14 @@ ggplot(preds2, aes(x = factor(.pred_class), fill = factor(Expert.Diagnose))) +
   theme_minimal()
 
 ```
+The model's predictions on the held-out test set showed strong agreement with the expert diagnoses. Specifically:
+
+- **Bipolar Type-1:** 4 of 6 cases were correctly predicted (66.7%)  
+- **Bipolar Type-2:** 5 of 7 cases were correctly predicted (71.4%)  
+- **Depression:** 6 of 7 cases were correctly predicted (85.7%)  
+- **Normal:** 4 of 6 cases were correctly predicted (66.7%)  
+
+Overall, these results indicate that the model accurately identified the majority of cases in each diagnostic category, demonstrating good discriminatory performance across the four classes.
 
 
 ##### Model Evaluation & Performance 
@@ -682,6 +703,9 @@ roc_auc(test_results, truth = Expert.Diagnose,
 
 
 ```
+
+
+
 
 ```{r}
 # ROC Curve (macro average)

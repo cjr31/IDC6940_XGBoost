@@ -3922,7 +3922,7 @@ V = \sqrt{\frac{\chi^2 / n}{\min(k - 1, r - 1)}}
 </section>
 <section id="data-transformation-cleaning" class="level5">
 <h5 class="anchored" data-anchor-id="data-transformation-cleaning">Data Transformation &amp; Cleaning</h5>
-<p>To facilitate analysis, all categorical variables in the dataset were transformed into numerical or grouped categorical formats. The transformations were applied as follows:</p>
+<p>To facilitate analysis, all categorical variables in the dataset were transformed into numerical or grouped categorical formats in Excel. The transformations were applied as follows:</p>
 <ul>
 <li><p><strong>Ordinal Frequency Responses</strong> (e.g., <em>Sadness</em>, <em>Euphoric</em>, <em>Exhausted</em>):</p>
 <ul>
@@ -4007,6 +4007,7 @@ IG(T, X) = H(T) - \sum_{v \in \text{Values}(X)} \frac{|T_v|}{|T|} H(T_v)
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>test_data  <span class="ot">&lt;-</span> <span class="fu">testing</span>(data_split)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+<p>The dataset was randomly partitioned into an 80/20 training–testing split, resulting in 96 patient surveys used for model training and 24 surveys reserved for independent testing. The predictive target for all models was the expert clinical diagnosis, which served as the ground-truth reference label.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -4033,6 +4034,7 @@ IG(T, X) = H(T) - \sum_{v \in \text{Values}(X)} \frac{|T_v|}{|T|} H(T_v)
 <span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">&quot;classification&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+<p>An XGBoost model specification was created using the tidymodels framework with all major hyperparameters set to be tuned, including the number of trees, tree depth, learning rate, loss reduction, minimum node size, subsampling rate, and number of predictors considered at each split. The model was configured to use the “xgboost” engine and trained in classification mode. This specification functions as the template for subsequent hyperparameter optimization within the workflow.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -4050,6 +4052,7 @@ IG(T, X) = H(T) - \sum_{v \in \text{Values}(X)} \frac{|T_v|}{|T|} H(T_v)
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>folds <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(train_data, <span class="at">v =</span> <span class="dv">5</span>, <span class="at">strata =</span> Expert.Diagnose)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+<p>Five-fold stratified cross-validation was used for hyperparameter tuning. The training dataset was partitioned into five equally sized folds with the class distribution of the outcome variable (Expert Diagnosis) preserved in each fold. For each tuning iteration, models were trained on four folds and validated on the remaining fold, ensuring stable and unbiased performance estimates. A fixed random seed was used to ensure reproducibility of the fold assignments.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -4107,6 +4110,7 @@ Finalized based on the dimensions of the training dataset to ensure meaningful s
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+<p>Hyperparameter tuning was performed using 5-fold stratified cross-validation with a space-filling grid of 30 candidate parameter combinations. For each combination, models were trained on four folds and evaluated on the fifth, cycling through all folds. Model performance was assessed using accuracy and the area under the ROC curve (ROC AUC). Predictions from each resample were saved to support additional diagnostic analyses. A fixed random seed ensured reproducibility of all results.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -4146,6 +4150,7 @@ Finalized based on the dimensions of the training dataset to ensure meaningful s
 </div>
 </div>
 </div>
+<p>Visualizing the tuning results revealed clear performance patterns across the explored hyperparameter space. The ROC AUC versus number of trees plot indicated that the optimal tree depth was approximately 2, suggesting that relatively shallow trees generalized best for this dataset. Model performance increased steadily with the number of boosting iterations, with the highest ROC AUC occurring at around 625 trees. At this configuration, the model achieved an accuracy exceeding 0.80 and a ROC AUC greater than 0.90, indicating strong discriminatory performance.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -4615,6 +4620,9 @@ height: 0px !important;
 </div>
 </div>
 </div>
+<p>Although visual inspection of the tuning plots provided a general sense of the model’s performance trends, identifying the exact optimal hyperparameters was not straightforward due to interaction effects between parameters and the non-linear nature of boosted tree models. Therefore, the select_best() function from the tidymodels framework was used to systematically extract the hyperparameter combination that achieved the highest ROC AUC across all resampled evaluations.</p>
+<p>The resulting optimal configuration included 3 predictors (mtry = 3), 627 boosting iterations, a minimum node size (min_n) of 2, a learning rate of 0.16501, a loss-reduction parameter of 0.0034, and a subsample proportion of 0.5655. This combination represents the tuning grid entry labeled pre0_mod06_post0, which achieved the best balance between model complexity and predictive performance during cross-validation.</p>
+<p>This automated selection approach ensures that the final model parameters are chosen objectively based on empirical performance rather than subjective visual interpretation, which can be challenging when multiple hyperparameters interact.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -4639,6 +4647,7 @@ height: 0px !important;
 </div>
 </div>
 </div>
+<p>Using the best parameter fit the has the top five features in order of importance as mood swings, sadness, agressive response, exhausted, and euphoric.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -4661,6 +4670,17 @@ height: 0px !important;
 </div>
 </div>
 </div>
+<p>The model’s predictions on the held-out test set showed strong agreement with the expert diagnoses. Specifically:</p>
+<ul>
+<li><strong>Bipolar Type-1:</strong> 4 of 6 cases were correctly predicted (66.7%)<br>
+</li>
+<li><strong>Bipolar Type-2:</strong> 5 of 7 cases were correctly predicted (71.4%)<br>
+</li>
+<li><strong>Depression:</strong> 6 of 7 cases were correctly predicted (85.7%)<br>
+</li>
+<li><strong>Normal:</strong> 4 of 6 cases were correctly predicted (66.7%)</li>
+</ul>
+<p>Overall, these results indicate that the model accurately identified the majority of cases in each diagnostic category, demonstrating good discriminatory performance across the four classes.</p>
 </section>
 <section id="model-evaluation-performance" class="level5">
 <h5 class="anchored" data-anchor-id="model-evaluation-performance">Model Evaluation &amp; Performance</h5>
