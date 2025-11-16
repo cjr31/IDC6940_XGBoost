@@ -121,6 +121,30 @@ So we can summarize that the XGBoost model starts with a simple guess, then buil
 
 ## Analysis and Results
 
+```{r}
+# Load libraries
+library(knitr)
+library(tidyverse)
+library(xgboost)
+library(ggplot2)
+library(DataExplorer)
+library(dplyr)
+library(tidyr)
+library(kableExtra)
+library(vcd)
+library(reshape2)
+library(FSelectorRcpp)
+library(magrittr) 
+library(tidymodels)
+library(iml)
+library(vip)
+library(shapviz)
+library(recipes)
+library(purrr)
+library(rsample)
+library(yardstick)
+```
+
 ### Data Exploration and Visualization
 
 The dataset used for this analysis was sourced from Kaggle (https://www.kaggle.com/datasets/cid007/mental-disorder-classification) and originates from a private psychologist's office, capturing patient data collected throughout 2023. It includes information on 120 individuals who were assessed for mental health conditions. Each patient was diagnosed with one of four possible mental health statuses: normal, bipolar type I, bipolar type II, or depression. The dataset contains 17 variables that were used to inform the diagnostic process, potentially covering a range of clinical, behavioral, and demographic factors. These variables form the basis for classification and analysis of the mental health conditions represented. Table 1 provides a detailed overview of each variable included in the dataset, offering insight into the features considered during the diagnostic evaluation.
@@ -181,7 +205,6 @@ table1 <- data.frame(
 )
 
 # Print Table 1
-library(knitr)
 
 kable(table1, format = "html", table.attr = "style='width:100%;'")  # for HTML output
 
@@ -192,30 +215,6 @@ kable(table1, format = "html", table.attr = "style='width:100%;'")  # for HTML o
 
 ```{r}
 #| include: false
-
-# Set CRAN mirror explicitly
-options(repos = c(CRAN = "https://cloud.r-project.org"))
-
-# Install missing packages only
-required_packages <- c("xgboost", "DataExplorer", "tidyverse", "ggplot2", "dplyr")
-
-for (pkg in required_packages) {
-  if (!requireNamespace(pkg, quietly = TRUE)) {
-    install.packages(pkg, dependencies = TRUE)
-  }
-}
-
-# Load libraries
-library(tidyverse)
-library(xgboost)
-library(ggplot2)
-library(DataExplorer)
-library(dplyr)
-
-```
-
-```{r}
-#| include: false
 data <- read.csv("Dataset-Mental-Disorders.csv", stringsAsFactors = FALSE)
 # Drop Patient Number column 
 data <- data %>% select(-`Patient.Number`)
@@ -223,9 +222,6 @@ data <- data %>% select(-`Patient.Number`)
 
 
 ```{r}
-library(dplyr)
-library(tidyr)
-library(ggplot2)
 
 # Define variables to combine
 included_vars <- c("Sexual.Activity", "Concentration", "Optimism")
@@ -256,11 +252,6 @@ The data appears to be noramlly distributed across the different variables and f
 
 ```{r}
 #| echo: false
-library(dplyr)
-library(tidyr)
-library(knitr)
-library(kableExtra)
-
 # List of variables to exclude
 excluded_vars <- c("Sexual.Activity", "Concentration", "Optimism")
 
@@ -301,10 +292,6 @@ target <- data$Expert.Diagnose
 # Drop target from the features dataset
 features <- data %>% select(-"Expert.Diagnose")
 
-# Install needed package
-install.packages("vcd", dependencies = TRUE)
-library(vcd)
-
 # Compute Cramer's V for each feature against the target
 cramers_v <- sapply(names(features), function(col) {
   tbl <- table(features[[col]], target)
@@ -318,7 +305,6 @@ cramers_v
 
 ```{r}
 # Convert to data frame for plotting
-library(ggplot2)
 
 cramers_df <- data.frame(
   Variable = names(cramers_v),
@@ -372,9 +358,6 @@ datat <- read.csv("Transformed Dataset.csv", stringsAsFactors = FALSE)
 ```{r}
 #| eval: false
 #| include: false
-# Load libraries
-library(ggplot2)
-library(reshape2)
 
 # Exclude categorical variables
 numeric_data <- datat[, !(names(datat) %in% c("Sexual.Activity", "Optimism", "Concentration"))]
@@ -399,17 +382,7 @@ ggplot(data = melted_cor, aes(x = Var1, y = Var2, fill = value)) +
   labs(title = "Correlation Matrix Heatmap", x = "", y = "")
 
 ```
-```{r}
-#| include: false
-# Install packages
-install.packages("FSelectorRcpp")
-install.packages("ggplot2")
 
-# Load libraries
-library(FSelectorRcpp)
-library(ggplot2)
-
-```
 
 ```{r}
 # Compute Information Gain
@@ -448,24 +421,9 @@ Moreover, XGBoost’s feature importance outputs enhance interpretability, an es
 ##### Hyperparameter Optimization
 
 ```{r}
-#| eval: false
-#| include: false
-install.packages("magrittr")
-install.packages("dplyr")
-library(magrittr) 
-library(dplyr)
-```
-
-```{r}
 #Prepring Transformed Dataset
 datat <- datat %>%
   mutate(across(where(is.character), as.factor))
-```
-
-```{r}
-#| include: false
-install.packages("tidymodels")
-library(tidymodels)
 ```
 
 ```{r}
@@ -604,7 +562,114 @@ roc_curve(test_results, truth = Expert.Diagnose, all_of(prob_cols)) %>%
 
 ##### Feature Importance & Interepretability
 
+```{r}
+
+# Extract fitted workflow and XGBoost model
+
+wf_fit <- final_fit
+xgb_fit <- wf_fit %>%
+extract_fit_engine()
+
+# Extract recipe and bake training data into numeric matrix
+
+rec <- wf_fit %>% extract_recipe()
+
+train_baked <- bake(rec, new_data = train_data)
+
+# Separate predictors and target
+
+X_train <- train_baked %>% select(-Expert.Diagnose)
+X_train_matrix <- as.matrix(X_train)
+
+```
+
+```{r}
+# Compute SHAP values
+
+sv <- shapviz(
+xgb_fit,
+X_train_matrix,
+X = X_train
+)
+
+```
+
+```{r}
+# Global feature importance
+
+sv_importance <- sv_importance(sv)
+sv_importance
+
+```
+
+
+```{r}
+# Pick an observation
+
+i <- 1
+
+sv_waterfall(sv, row_index = i)
+
+```
+
+
+
 ##### Sensitvity & Robustness Analysis
+
+```{r}
+# Repeated stratified k-fold CV
+set.seed(123)
+repeated_folds <- vfold_cv(
+  train_data,
+  v = 5,
+  repeats = 5,
+  strata = Expert.Diagnose
+)
+
+```
+
+
+```{r}
+#K Fold Cross Validation for Robustness
+
+cv_results <- map_dfr(repeated_folds$splits, function(split) {
+  
+  # Fit workflow
+  fit_wf <- fit(final_xgb, data = analysis(split))
+  
+  # Predict class
+  pred_class <- predict(fit_wf, new_data = assessment(split)) %>%
+    rename(.pred_class = .pred_class)
+  
+  # Predict probabilities
+  pred_prob <- predict(fit_wf, new_data = assessment(split), type = "prob")
+  
+  # Truth
+  truth <- assessment(split) %>% select(Expert.Diagnose)
+  
+  # Combine predictions
+  preds <- bind_cols(pred_class, pred_prob, truth)
+  
+  # Only probability columns (exclude .pred_class)
+  prob_cols <- colnames(preds)[grepl("^\\.pred_", colnames(preds)) & colnames(preds) != ".pred_class"]
+  
+  tibble(
+    accuracy = accuracy(preds, truth = Expert.Diagnose, estimate = .pred_class)$.estimate,
+    roc_auc  = roc_auc(preds, truth = Expert.Diagnose, !!!syms(prob_cols), estimator = "macro_weighted")$.estimate
+  )
+})
+
+cv_results %>%
+  summarise(
+    mean_accuracy = mean(accuracy),
+    sd_accuracy   = sd(accuracy),
+    mean_roc      = mean(roc_auc),
+    sd_roc        = sd(roc_auc)
+  )
+
+
+```
+
 
 ##### Summary of Modeling Results
 
