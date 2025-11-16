@@ -143,6 +143,7 @@ library(recipes)
 library(purrr)
 library(rsample)
 library(yardstick)
+library(gt)
 ```
 
 ### Data Exploration and Visualization
@@ -586,8 +587,62 @@ best_params <- select_best(xgb_tune_results, metric = "roc_auc")
 ```
 
 ```{r}
+
+best_params_table <- best_params %>%
+  as_tibble() %>%                # ensure it's a tibble
+  mutate(across(where(is.numeric), ~ round(.x, 4)))  # round numeric values
+
+
+best_params_table %>%
+  gt() %>%
+  tab_header(
+    title = "Best Hyperparameter Combination",
+    subtitle = "Selected based on ROC AUC"
+  ) %>%
+  fmt_number(
+    columns = where(is.numeric),
+    decimals = 4
+  ) %>%
+  cols_label(
+    trees = "Number of Trees",
+    tree_depth = "Tree Depth",
+    learn_rate = "Learning Rate",
+    loss_reduction = "Loss Reduction",
+    min_n = "Min Node Size",
+    sample_size = "Subsample Size",
+    mtry = "Number of Predictors"
+  )
+
+```
+
+
+
+```{r}
 # Finalize the model with best params
 final_xgb <- finalize_workflow(xgb_workflow, best_params)
+```
+
+```{r}
+# Fit the finalized workflow on the full training data
+final_fit <- fit(final_xgb, data = train_data)
+
+# Compute and plot feature importance
+vip(final_fit$fit$fit, geom = "col")
+
+```
+
+```{r}
+#Prediction Visualization
+preds2 <- predict(final_fit, new_data = test_data, type = "class") %>%
+  bind_cols(test_data %>% select(Expert.Diagnose)) %>%
+  rename(.pred_class = .pred_class)
+
+# Plot
+ggplot(preds2, aes(x = factor(.pred_class), fill = factor(Expert.Diagnose))) +
+  geom_bar(position = "dodge") +
+  labs(x = "Predicted Class", fill = "True Class") +
+  theme_minimal()
+
 ```
 
 
