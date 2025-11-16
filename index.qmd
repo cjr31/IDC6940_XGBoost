@@ -235,7 +235,7 @@ long_data <- data %>%
 ggplot(long_data, aes(x = Response, fill = Variable)) +
   geom_bar(position = "dodge") +  # dodge = side-by-side bars
   labs(
-    title = "Response Distribution for Sexual Activity, Concentration, and Optimism",
+    title = "Figure 2 Response Distribution for Sexual Activity, Concentration, and Optimism",
     x = "Response",
     y = "Count",
     fill = "Variable"
@@ -248,7 +248,7 @@ ggplot(long_data, aes(x = Response, fill = Variable)) +
 
 ```
 
-The data appears to be noramlly distributed across the different variables and features.
+In Figure 2, the data appears to be noramlly distributed across the three variables, concetration, opitimism, and sexual activity which were all rated from 1 to 10 from the 120 patients.
 
 ```{r}
 #| echo: false
@@ -268,7 +268,7 @@ distribution_table <- data %>%
 # Format nicely
 distribution_table %>%
   kbl(
-    caption = "Category Distributions per Categorical Variable",
+    caption = "Table 2 Category Distributions per Categorical Variable",
     align = c("l", "l"),
     col.names = c("Variable", "Category Distribution"),
     escape = FALSE  # Corrected from earlier error
@@ -281,7 +281,7 @@ distribution_table %>%
   column_spec(2, width = "40em")
 ```
 
-
+Table 2 presents the distribution of the variable. The yes/no variables are approximately balanced across patient responses, indicating a well-distributed set of features. The target variable, Expert Diagnosis, is similarly balanced, with nearly 30 patients per diagnostic category. This distribution ensures that no single diagnosis dominates the dataset, making it suitable for robust analysis.
 
 
 ```{r}
@@ -318,13 +318,22 @@ cramers_df <- cramers_df[!is.na(cramers_df$CramersV), ]
 ggplot(cramers_df, aes(x = reorder(Variable, CramersV), y = CramersV)) +
   geom_col(fill = "#2c7fb8") +
   coord_flip() +
-  labs(title = "Cramer's V Association with Mental Health Diagnosis",
+  labs(title = "Figure 3 Cramer's V Association with Mental Health Diagnosis",
        x = "Feature",
        y = "Cramer's V") +
   theme_minimal()
 
 ```
-Using Cramer's V we are able to see that mood swings and suicidal thoughts have the highest correlation to the mental health diagnosis. 
+**Figure 3** shows the association between categorical variables and the mental health diagnosis using Cramer's V. The results indicate that *Mood Swings* and *Suicidal Thoughts* exhibit the strongest correlation with the diagnosis.  
+
+Cramer's V is calculated as:
+
+$$
+V = \sqrt{\frac{\chi^2 / n}{\min(k - 1, r - 1)}}
+$$
+
+where \(\chi^2\) is the chi-squared statistic for the contingency table, \(n\) is the total number of observations, \(k\) is the number of columns, and \(r\) is the number of rows in the table.
+ 
 
 ##### Data Transformation & Cleaning 
 To facilitate analysis, all categorical variables in the dataset were transformed into numerical or grouped categorical formats. The transformations were applied as follows:
@@ -385,6 +394,7 @@ ggplot(data = melted_cor, aes(x = Var1, y = Var2, fill = value)) +
 
 
 ```{r}
+#| include: false
 # Compute Information Gain
 info_gain <- information_gain(Expert.Diagnose ~ ., data = datat)
 
@@ -399,14 +409,23 @@ print(info_gain_sorted)
 ggplot(info_gain_sorted, aes(x = reorder(attributes, importance), y = importance)) +
   geom_bar(stat = "identity", fill = "forestgreen") +
   coord_flip() +
-  labs(title = "Information Gain by Variable",
+  labs(title = "Figure 4 Information Gain by Variable",
        x = "Variable",
        y = "Information Gain") +
   theme_minimal()
 
 ```
 
-Using information gain on the transformed dataset, mood swings and optimism provide the highest information gain. 
+**Figure 4** illustrates the results of an information gain analysis performed on the transformed dataset. Among the variables, *Mood Swings* (0.5759) and *Optimism* (0.2303) exhibit the highest information gain, indicating that they contribute most significantly to reducing uncertainty in predicting the target variable.  
+
+Information gain is calculated as:
+
+$$
+IG(T, X) = H(T) - \sum_{v \in \text{Values}(X)} \frac{|T_v|}{|T|} H(T_v)
+$$
+
+where \(H(T)\) is the entropy of the target variable \(T\), \(X\) is the feature of interest, \(T_v\) is the subset of \(T\) where \(X\) takes value \(v\), and \(|\cdot|\) denotes the number of observations.
+
 
 ### Modeling and Results
 
