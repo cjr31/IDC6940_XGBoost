@@ -332,7 +332,7 @@ $$
 V = \sqrt{\frac{\chi^2 / n}{\min(k - 1, r - 1)}}
 $$
 
-where \(\chi^2\) is the chi-squared statistic for the contingency table, \(n\) is the total number of observations, \(k\) is the number of columns, and \(r\) is the number of rows in the table.
+where \(\chi^2\) is the chi-squared statistic for the contingency table, \(n\) is the total number of observations, \(k\) is the number of columns, and \(r\) is the number of rows in the table [@wucramersV].
  
 
 ##### Data Transformation & Cleaning 
@@ -424,7 +424,7 @@ $$
 IG(T, X) = H(T) - \sum_{v \in \text{Values}(X)} \frac{|T_v|}{|T|} H(T_v)
 $$
 
-where \(H(T)\) is the entropy of the target variable \(T\), \(X\) is the feature of interest, \(T_v\) is the subset of \(T\) where \(X\) takes value \(v\), and \(|\cdot|\) denotes the number of observations.
+where \(H(T)\) is the entropy of the target variable \(T\), \(X\) is the feature of interest, \(T_v\) is the subset of \(T\) where \(X\) takes value \(v\), and \(|\cdot|\) denotes the number of observations [@leeInfo].
 
 
 ### Modeling and Results
