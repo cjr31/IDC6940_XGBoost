@@ -105,7 +105,7 @@ Gradient descent is used to minimize this objective function by updating model p
 Hyperparameters such as the learning rate, maximum tree depth, regularization strength, and subsampling ratio are typically tuned via cross-validation to maximize model performance. Due to its efficiency and predictive power, XGBoost is widely used in structured data problems [@zhang2022imbalanced].
 
 ![XG Boost](XG Boost.png)
-Figure 1 shows the sequential 3-stage process of XGBoost:
+**Figure 1** shows the sequential 3-stage process of XGBoost:
 
 Stage 1: Initial Prediction
 The process begins by making a simple first guess, or "base prediction" . This initial model is usually very simple (like the average of all the data). The graph shows this simple model as a flat line that doesn't fit the data points well. The model then calculates the errors, or residuals, which are the differences between this first guess and the actual data points.
@@ -147,7 +147,7 @@ library(yardstick)
 
 ### Data Exploration and Visualization
 
-The dataset used for this analysis was sourced from Kaggle (https://www.kaggle.com/datasets/cid007/mental-disorder-classification) and originates from a private psychologist's office, capturing patient data collected throughout 2023. It includes information on 120 individuals who were assessed for mental health conditions. Each patient was diagnosed with one of four possible mental health statuses: normal, bipolar type I, bipolar type II, or depression. The dataset contains 17 variables that were used to inform the diagnostic process, potentially covering a range of clinical, behavioral, and demographic factors. These variables form the basis for classification and analysis of the mental health conditions represented. Table 1 provides a detailed overview of each variable included in the dataset, offering insight into the features considered during the diagnostic evaluation.
+The dataset used for this analysis was sourced from Kaggle (https://www.kaggle.com/datasets/cid007/mental-disorder-classification) and originates from a private psychologist's office, capturing patient data collected throughout 2023. It includes information on 120 individuals who were assessed for mental health conditions. Each patient was diagnosed with one of four possible mental health statuses: normal, bipolar type I, bipolar type II, or depression. The dataset contains 17 variables that were used to inform the diagnostic process, potentially covering a range of clinical, behavioral, and demographic factors. These variables form the basis for classification and analysis of the mental health conditions represented. **Table 1** provides a detailed overview of each variable included in the dataset, offering insight into the features considered during the diagnostic evaluation.
 
 ```{r}
 # Create Table 1: Variable Names and Descriptions
@@ -248,7 +248,7 @@ ggplot(long_data, aes(x = Response, fill = Variable)) +
 
 ```
 
-In Figure 2, the data appears to be noramlly distributed across the three variables, concetration, opitimism, and sexual activity which were all rated from 1 to 10 from the 120 patients.
+In **Figure** 2, the data appears to be normally distributed across the three variables, concetration, opitimism, and sexual activity which were all rated from 1 to 10 from the 120 patients.
 
 ```{r}
 #| echo: false
@@ -265,7 +265,7 @@ distribution_table <- data %>%
   group_by(Variable) %>%
   summarise(Distribution = paste(Value, Count, sep = ": ", collapse = ", "), .groups = "drop")
 
-# Format nicely
+# Format 
 distribution_table %>%
   kbl(
     caption = "Table 2 Category Distributions per Categorical Variable",
@@ -281,7 +281,7 @@ distribution_table %>%
   column_spec(2, width = "40em")
 ```
 
-Table 2 presents the distribution of the variable. The yes/no variables are approximately balanced across patient responses, indicating a well-distributed set of features. The target variable, Expert Diagnosis, is similarly balanced, with nearly 30 patients per diagnostic category. This distribution ensures that no single diagnosis dominates the dataset, making it suitable for robust analysis.
+**Table 2** presents the distribution of the variable. The yes/no variables are approximately balanced across patient responses, indicating a well-distributed set of features. The target variable, Expert Diagnosis, is similarly balanced, with nearly 30 patients per diagnostic category. This distribution ensures that no single diagnosis dominates the dataset, making it suitable for robust analysis.
 
 
 ```{r}
@@ -440,7 +440,7 @@ Moreover, XGBoost’s feature importance outputs enhance interpretability, an es
 ##### Hyperparameter Optimization
 
 ```{r}
-#Prepring Transformed Dataset
+#Preparing Transformed Dataset
 datat <- datat %>%
   mutate(across(where(is.character), as.factor))
 ```
@@ -509,6 +509,40 @@ xgb_grid <- grid_space_filling(
   size = 30
 )
 ```
+
+The hyperparameter grid for the XGBoost model was constructed using a **space-filling design** to efficiently explore the multi-dimensional parameter space. This approach ensures broad coverage of plausible hyperparameter combinations while avoiding the combinatorial explosion of a full grid search. Specifically, the grid includes the following parameters:
+
+- **Number of Trees (`trees`)**:  
+  Set between 100 and 1000 to capture both shallow ensembles and deeper ensembles capable of modeling complex relationships. This range balances expressiveness with computational efficiency.
+
+- **Tree Depth (`tree_depth`)**:  
+  Ranges from 2 to 10, allowing the exploration of simple trees that generalize well as well as deeper trees that can capture intricate feature interactions.
+
+- **Learning Rate (`learn_rate`)**:  
+  Varies from 0.001 to 0.3. Lower values provide finer control over updates, potentially improving generalization, while higher values allow faster convergence at the risk of overshooting the optimal solution.
+
+- **Loss Reduction (`loss_reduction`)**:  
+  Controls the minimum reduction in loss required to create a split, helping to prevent unnecessary splits and reduce overfitting.
+
+- **Minimum Node Size (`min_n`)**:  
+  Specifies the minimum number of observations per terminal node, balancing the ability to capture fine-grained patterns with regularization.
+
+- **Subsampling (`sample_size`)**:  
+  Represented as a proportion of the training data, introducing stochasticity to improve generalization.
+
+- **Number of Predictors Considered per Split (`mtry`)**:  
+  Finalized based on the dimensions of the training dataset to ensure meaningful splits.
+
+The final grid consists of **30 candidate hyperparameter combinations**, which provides a compromise between computational feasibility and adequate coverage of the parameter space.
+
+Using a space-filling design (`grid_space_filling`) offers several advantages:
+
+1. **Efficiency:** Broadly explores the parameter space with fewer evaluations.  
+2. **Coverage:** Reduces the risk of missing promising hyperparameter configurations.  
+3. **Scalability:** Remains computationally feasible for large datasets or models with many parameters.
+
+In summary, this hyperparameter grid balances model flexibility, generalization, and computational efficiency, allowing XGBoost to explore a wide range of model complexities while incorporating key regularization strategies to reduce overfitting [@Geron2019].
+
 
 ```{r}
 # Tuning the model
