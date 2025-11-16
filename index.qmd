@@ -558,6 +558,28 @@ xgb_tune_results <- tune_grid(
 ```
 
 ```{r}
+# Visualize tuning results
+autoplot(xgb_tune_results)
+```
+```{r}
+tune_df <- collect_metrics(xgb_tune_results)
+
+# Plot ROC AUC vs number of trees
+ggplot(tune_df, aes(x = trees, y = mean, color = factor(tree_depth))) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~ .metric, scales = "free_y") +
+  labs(
+    x = "Number of Trees",
+    y = "Mean Performance",
+    color = "Tree Depth"
+  ) +
+  theme_minimal()
+
+```
+
+
+```{r}
 # Selecting best parameters
 best_params <- select_best(xgb_tune_results, metric = "roc_auc")
 
