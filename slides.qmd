@@ -1,10 +1,11 @@
 ---
-title: "Present a great story for data science projects"
-subtitle: "This is a Slide Template"
-author: "Students names (Advisor: Dr. Cohen)"
+title: "XG Boost in Mental Health Classification"
+subtitle: "Fall 2025 Capstone for Data Science"
+author: "Aabiya Mansoor, Abigail Penza Jackson, Corina Rich, Madelyn Champion (Advisor: Dr. Cohen)"
 date: '`r Sys.Date()`'
 format:
-  revealjs
+  revealjs:
+    theme: moon
 course: Capstone Projects in Data Science
 bibliography: references.bib # file contains bibtex for references
 #always_allow_html: true # this allows to get PDF with HTML features
@@ -16,19 +17,6 @@ editor:
   markdown: 
     wrap: 72
 ---
-
-::: callout-important
-**Remember:** Your goal is to make your audience understand and care
-about your findings. By crafting a compelling story, you can effectively
-communicate the value of your data science project.
-
-Carefully read this template since it has instructions and tips to
-writing!
-
-More information about `revealjs`:
-<https://quarto.org/docs/reference/formats/presentations/revealjs.html>
-:::
-
 ## Introduction  {.smaller}
 
 -   Develop a storyline that captures attention and maintains interest.
