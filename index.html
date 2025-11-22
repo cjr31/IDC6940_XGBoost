@@ -4832,6 +4832,42 @@ The macro-weighted ROC AUC of <strong>0.927</strong> is notably high. This sugge
 </div>
 </div>
 </div>
+<p>The SHAP value plot provides insight into how each predictor contributes to the classification decisions across the four classes. Several features emerge as consistently influential, though the degree of influence varies across classes, highlighting class-specific behavioral and emotional markers within the model.</p>
+<p>A few features show high average absolute SHAP values across multiple classes, indicating broad predictive power:</p>
+<ul>
+<li><p><strong>Mood.Swing</strong><br>
+This feature exhibits the largest SHAP magnitude overall, particularly for <strong>Class_2</strong> and <strong>Class_1</strong>. Its prominence suggests that variability in mood plays a central role in distinguishing class patterns.</p></li>
+<li><p><strong>Suicidal.thoughts</strong><br>
+This feature contributes heavily, especially for <strong>Class_3</strong> and <strong>Class_2</strong>, indicating that the presence or intensity of suicidal thoughts is highly informative for separating these groups.</p></li>
+<li><p><strong>Sadness</strong><br>
+Sadness emerges as a strong differentiator for <strong>Class_1</strong>, suggesting that this emotional state carries notable weight in class identification for this group.</p></li>
+</ul>
+<p>Some predictors exhibit strong influence for specific classes, reflecting how the model uses distinct emotional, cognitive, or behavioral signals:</p>
+<ul>
+<li><p><strong>Concentration_Cat.2</strong><br>
+Particularly influential for <strong>Class_4</strong>, implying that concentration-related difficulties help distinguish this class.</p></li>
+<li><p><strong>Authority.Respect</strong><br>
+Most impactful for <strong>Class_2</strong>, suggesting that attitudes toward authority meaningfully guide predictions for this group.</p></li>
+<li><p><strong>Ignore…Move.On</strong><br>
+Shows notable influence for <strong>Class_4</strong>, indicating that coping style differences contribute to distinguishing this class.</p></li>
+<li><p><strong>Exhausted</strong><br>
+More influential for <strong>Class_4</strong> than others, highlighting fatigue-related symptoms as a distinguishing factor.</p></li>
+</ul>
+<p>Several features provide moderate but consistent contributions across classes:</p>
+<ul>
+<li><strong>Euphoric</strong><br>
+</li>
+<li><strong>Nervous.Breakdown</strong><br>
+</li>
+<li><strong>Aggressive.Response</strong><br>
+</li>
+<li><strong>Overthinking</strong><br>
+</li>
+<li><strong>Sleep.disorder</strong></li>
+</ul>
+<p>While not dominant for any single class, these variables add meaningful nuance to the model’s decision-making.</p>
+<p>Overall, the SHAP results indicate that the model relies on a multidimensional combination of emotional states (e.g., mood swings, sadness), cognitive patterns (e.g., concentration difficulty, overthinking), and behavioral responses (e.g., coping style, aggression) to differentiate between classes.</p>
+<p>The variation in SHAP profiles across groups suggests that the model is capturing <strong>distinct psychological or behavioral signatures</strong> for each class, rather than depending on a single feature. This aligns with the behavior expected of a well-calibrated multiclass XGBoost model, where class-specific patterns emerge through complex interactions among predictors.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -4849,6 +4885,76 @@ The macro-weighted ROC AUC of <strong>0.927</strong> is notably high. This sugge
 </div>
 </div>
 </div>
+<p>The SHAP waterfall charts illustrate how individual feature values contribute to the predicted score for each class by showing how the model moves from the baseline expectation (E[f(x)]) to the final class-specific output (f(x)). These plots highlight the most influential features driving the model’s decision for each class.</p>
+<p>For <strong>Class_1</strong>, the model predicts a relatively high output value, with the final prediction rising substantially above the baseline (E[f(x)] = 1.01). This indicates strong support in favor of Class_1 for this instance.</p>
+<p>Key positive contributors include:</p>
+<ul>
+<li><strong>Mood.Swing = 1</strong> (+1.54)<br>
+</li>
+<li><strong>Sadness = 1</strong> (+1.50)<br>
+</li>
+<li><strong>Admit.Mistakes = 0</strong><br>
+</li>
+<li><strong>Suicidal.thoughts = 1</strong><br>
+</li>
+<li><strong>Authority.Respect = 0</strong></li>
+</ul>
+<p>These features collectively push the prediction upward, suggesting that emotional variability, sadness, and the presence of suicidal thoughts are among the strongest drivers toward this class in this specific observation. Minor negative contributions appear (e.g., Sleep.disorder = 3), but the dominant pattern is positive.</p>
+<p>Overall, the waterfall shows that <strong>Class_1 receives strong cumulative support</strong> from several major emotional and behavioral indicators.</p>
+<p>For <strong>Class_2</strong>, the final predicted score (f(x) = 1.11) is lower than the class baseline of (E[f(x)] = 2.43), meaning the model moves away from predicting Class_2 for this instance.</p>
+<p>Major <strong>positive</strong> contributions:</p>
+<ul>
+<li><strong>Suicidal.thoughts = 1</strong> (+1.66)<br>
+</li>
+<li><strong>Mood.Swing = 1</strong> (+1.33)</li>
+</ul>
+<p>Major <strong>negative</strong> contributions:</p>
+<ul>
+<li><strong>Sadness = 1</strong> (–1.24)<br>
+</li>
+<li><strong>Authority.Respect = 0</strong> (–0.91)<br>
+</li>
+<li><strong>Concentration_Cat.2 = 1</strong> (–0.82)<br>
+</li>
+<li><strong>Try.Explanation = 1</strong> (–0.79)<br>
+</li>
+<li><strong>Nervous.Breakdown = 1</strong> (–0.77)<br>
+</li>
+<li><strong>Admit.Mistakes = 0</strong> (–0.70)</li>
+</ul>
+<p>Although there are strong positive drivers, they are outweighed by multiple negative influences. This results in a net downward movement from the class baseline, indicating that <strong>Class_2 is not well supported</strong> for this observation relative to Class_1.</p>
+<p>The <strong>Class_3</strong> prediction moves from a baseline of (E[f(x)] = 1.11) to a final prediction of (f(x) = -0.298), a substantial downward shift indicating <strong>strong evidence against</strong> Class_3 for this instance.</p>
+<p>Key contributions include:</p>
+<p>Positive: - <strong>Suicidal.thoughts = 1</strong> (+1.94)</p>
+<p>Negative: - <strong>Sadness = 1</strong> (–0.96)<br>
+- <strong>Euphoric = 2</strong> (–0.95)<br>
+- <strong>Concentration_Cat.2 = 1</strong> (–0.90)<br>
+- <strong>Mood.Swing = 1</strong> (–0.90)<br>
+- <strong>Optimism_Cat.2 = 0</strong> (–0.81)<br>
+- <strong>Anorexia = 1</strong> (–0.71)<br>
+- <strong>Admit.Mistakes = 0</strong> (–0.64)</p>
+<p>The single strong positive contribution is overwhelmed by numerous moderately sized negatives. This creates a consistent downward trajectory, showing that the feature profile <strong>does not align well with the Class_3 pattern</strong>.</p>
+<p>The prediction for <strong>Class_4</strong> moves from a baseline of (E[f(x)] = 0.174) up to (f(x) = 1.37), indicating <strong>support for Class_4</strong>, though not as strongly as Class_1.</p>
+<p>Key contributions:</p>
+<p>Positive: - <strong>Ignore…Move.On = 0</strong><br>
+- <strong>Try.Explanation = 1</strong><br>
+- <strong>Optimism_Cat.2 = 0</strong> (+0.56)<br>
+- <strong>Sadness = 1</strong> (+0.51)</p>
+<p>Negative: - <strong>Mood.Swing = 1</strong> (–1.43)<br>
+- <strong>Euphoric = 2</strong> (–0.77)<br>
+- <strong>Sleep.disorder = 3</strong> (–0.49)</p>
+<p>Despite some significant negative pushes—particularly from Mood.Swing—the positive contributions collectively outweigh them, resulting in a moderate upward shift.</p>
+<p>Across all four classes, the waterfall charts highlight:</p>
+<ul>
+<li><strong>Class_1 and Class_4 receive positive net support</strong>, with Class_1 showing the strongest alignment.<br>
+</li>
+<li><strong>Class_2 and Class_3 predictions decline from their baselines</strong>, indicating weaker support relative to other classes.<br>
+</li>
+<li>Emotional and cognitive features such as <strong>Mood Swing, Sadness, Suicidal Thoughts, Concentration issues, and coping styles</strong> consistently emerge as major contributors—though with different directions depending on the class.<br>
+</li>
+<li>The model distinguishes classes by the <em>pattern</em> of contributions rather than reliance on any single feature.</li>
+</ul>
+<p>These charts provide a transparent view of how individual feature values shape the model’s decision structure for each class.</p>
 </section>
 <section id="sensitvity-robustness-analysis" class="level5">
 <h5 class="anchored" data-anchor-id="sensitvity-robustness-analysis">Sensitvity &amp; Robustness Analysis</h5>
