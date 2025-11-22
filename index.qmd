@@ -967,6 +967,30 @@ cv_results %>%
 ```
 
 
+The sensitivity analysis results indicate that the model performs **consistently and reliably** across repeated resampling or perturbation scenarios. The metrics summarize how stable the model's performance remains when exposed to variability in the input data.
+
+- **Mean Accuracy:** 0.804  
+- **SD of Accuracy:** 0.0821  
+
+A mean accuracy of **80.4%** reflects strong overall predictive performance across iterations.  
+The standard deviation of **0.0821** suggests **moderate variability**, meaning that although the model generally performs well, accuracy fluctuates somewhat depending on sample composition. This level of variation is expected in many real-world scenarios and still indicates acceptable stability.
+
+- **Mean ROC AUC:** 0.957  
+- **SD of ROC AUC:** 0.0397  
+
+A mean ROC AUC of **0.957** demonstrates **excellent discriminative ability**, indicating that the model consistently separates classes with high precision.  
+The relatively low standard deviation of **0.0397** shows that this discriminative performance remains **highly stable**, even when the data varies. The model’s ranking ability (captured by AUC) is more robust than its classification accuracy, which is typical and expected.
+
+These results show that:
+
+- The model has **strong overall performance**, especially in terms of ROC AUC.  
+- Variability across repeats is **low to moderate**, supporting the model’s robustness.  
+- The model’s **ability to rank or distinguish classes** (ROC AUC) is especially stable, while accuracy shows slightly more sensitivity to data shifts.
+
+In summary, the sensitivity and robustness metrics indicate that the model behaves **consistently across perturbations**, with high performance and acceptable variability. This supports confidence in the model’s generalizability and stability for practical use.
+
+
+
 ##### Summary of Modeling Results
 
 ```{r}

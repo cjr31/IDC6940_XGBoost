@@ -5018,6 +5018,30 @@ More influential for <strong>Class_4</strong> than others, highlighting fatigue-
 1         0.804      0.0821    0.957 0.0397</code></pre>
 </div>
 </div>
+<p>The sensitivity analysis results indicate that the model performs <strong>consistently and reliably</strong> across repeated resampling or perturbation scenarios. The metrics summarize how stable the model’s performance remains when exposed to variability in the input data.</p>
+<ul>
+<li><strong>Mean Accuracy:</strong> 0.804<br>
+</li>
+<li><strong>SD of Accuracy:</strong> 0.0821</li>
+</ul>
+<p>A mean accuracy of <strong>80.4%</strong> reflects strong overall predictive performance across iterations.<br>
+The standard deviation of <strong>0.0821</strong> suggests <strong>moderate variability</strong>, meaning that although the model generally performs well, accuracy fluctuates somewhat depending on sample composition. This level of variation is expected in many real-world scenarios and still indicates acceptable stability.</p>
+<ul>
+<li><strong>Mean ROC AUC:</strong> 0.957<br>
+</li>
+<li><strong>SD of ROC AUC:</strong> 0.0397</li>
+</ul>
+<p>A mean ROC AUC of <strong>0.957</strong> demonstrates <strong>excellent discriminative ability</strong>, indicating that the model consistently separates classes with high precision.<br>
+The relatively low standard deviation of <strong>0.0397</strong> shows that this discriminative performance remains <strong>highly stable</strong>, even when the data varies. The model’s ranking ability (captured by AUC) is more robust than its classification accuracy, which is typical and expected.</p>
+<p>These results show that:</p>
+<ul>
+<li>The model has <strong>strong overall performance</strong>, especially in terms of ROC AUC.<br>
+</li>
+<li>Variability across repeats is <strong>low to moderate</strong>, supporting the model’s robustness.<br>
+</li>
+<li>The model’s <strong>ability to rank or distinguish classes</strong> (ROC AUC) is especially stable, while accuracy shows slightly more sensitivity to data shifts.</li>
+</ul>
+<p>In summary, the sensitivity and robustness metrics indicate that the model behaves <strong>consistently across perturbations</strong>, with high performance and acceptable variability. This supports confidence in the model’s generalizability and stability for practical use.</p>
 </section>
 <section id="summary-of-modeling-results" class="level5">
 <h5 class="anchored" data-anchor-id="summary-of-modeling-results">Summary of Modeling Results</h5>
