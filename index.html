@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aabiya Mansoor, Abigail Penza Jackson, Corina Rich, Madelyn Champion (Advisor: Dr. Cohen)">
-<meta name="dcterms.date" content="2025-11-16">
+<meta name="dcterms.date" content="2025-11-22">
 
 <title>Using XGBoost in Mental Disorder Classification</title>
 <style>
@@ -3506,7 +3506,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 16, 2025</p>
+      <p class="date">November 22, 2025</p>
     </div>
   </div>
   
@@ -4760,6 +4760,26 @@ height: 0px !important;
 </div>
 </div>
 </div>
+<p>The XGBoost multiclass classification model demonstrates <strong>moderate overall predictive performance</strong>, with room for improvement but also several encouraging indicators of discriminative ability.</p>
+<ul>
+<li><p><strong>Accuracy:</strong> 0.654<br>
+An accuracy of <strong>65.4%</strong> suggests that the model correctly classifies roughly two-thirds of the observations. While acceptable depending on the problem context and class complexity, this level indicates that the model may still struggle with certain classes or nuanced decision boundaries.</p></li>
+<li><p><strong>Kappa:</strong> 0.534<br>
+The Kappa value of <strong>0.534</strong> reflects <strong>moderate agreement</strong> between the model’s predictions and the true class labels after accounting for chance. This reinforces the message from accuracy: the model is performing meaningfully better than random guessing but is not yet achieving strong or near-perfect classification consistency.</p></li>
+<li><p><strong>ROC AUC (macro-weighted):</strong> 0.927<br>
+The macro-weighted ROC AUC of <strong>0.927</strong> is notably high. This suggests that the model does a strong job of ranking observations correctly across all classes, even if it occasionally makes incorrect final class assignments. High AUC with moderate accuracy often indicates good separability between classes but potential issues with thresholding, class imbalance, or misclassification among a subset of similar classes.</p></li>
+</ul>
+<p>Taken together, the metrics indicate that the model has <strong>strong underlying discriminative power (high AUC)</strong> but <strong>moderate final classification performance (accuracy and kappa)</strong>. This pattern often suggests opportunities for improvement through:</p>
+<ul>
+<li>Better class weighting or resampling if class imbalance is present<br>
+</li>
+<li>Hyperparameter tuning, especially around learning rate, tree depth, and regularization<br>
+</li>
+<li>Refinement of decision thresholds or calibration<br>
+</li>
+<li>Feature engineering to improve separation where misclassifications are common</li>
+</ul>
+<p>In summary, the XGBoost model shows <strong>solid potential with strong class separability</strong>, and with targeted improvements, it may achieve significantly higher classification reliability.</p>
 </section>
 <section id="feature-importance-interepretability" class="level5">
 <h5 class="anchored" data-anchor-id="feature-importance-interepretability">Feature Importance &amp; Interepretability</h5>
@@ -4899,10 +4919,12 @@ height: 0px !important;
 </section>
 <section id="conclusion" class="level3">
 <h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
-<ul>
-<li><p>Summarize your key findings.</p></li>
-<li><p>Discuss the implications of your results.</p></li>
-</ul>
+<p>The purpose of this study was to evaluate the effectiveness of an XGBoost model in predicting mental-health outcomes using a survey-based dataset. By developing, tuning, and validating the model, we examined its ability to identify influential predictive factors and to capture non-linear relationships within mental-health data. Overall, the results indicate that XGBoost performed robustly, demonstrating consistent accuracy across cross-validation folds and strong generalizability relative to baseline methods.</p>
+<p>The analysis highlighted several key predictors—particularly self-reported stress indicators, behavioral patterns, and wellness-related factors—as the most influential contributors to model performance. These variables emerged as top-ranking features, suggesting their relevance as potential risk indicators for adverse mental-health outcomes. The model effectively distinguished between outcome classes, and the stability of performance across tuning configurations indicates limited susceptibility to overfitting.</p>
+<p>These findings suggest that machine-learning models such as XGBoost could support early mental-health monitoring efforts, particularly in clinical or screening contexts. A predictive model capable of identifying at-risk individuals through survey responses may augment traditional diagnostic processes. Although self-reported data may introduce bias, the model’s outputs could still serve as a useful complement to clinician judgment when applied with appropriate caution and follow-up procedures.</p>
+<p>This study demonstrates that boosted-tree models provide a strong methodological option for mental-health prediction tasks. XGBoost effectively managed data limitations, captured non-linear relationships, and generated interpretable feature-importance measures that offer insights into key predictors. Nonetheless, several limitations must be acknowledged. The relatively small dataset may constrain the generalizability of results; class imbalance could influence prediction behavior; and, as with all correlational modeling approaches, the findings do not establish causal relationships.</p>
+<p>Future work could expand on this analysis in several ways. Incorporating larger and more diverse datasets would enable validation across broader populations. Integrating behavioral or longitudinal variables may further enhance predictive performance. Comparative evaluations using alternative models—such as Random Forests, LightGBM, or neural networks—would help determine whether the observed performance is model-specific or consistent across algorithms. In addition, real-world implementation studies are needed to evaluate practical utility and reliability. Ethical considerations, including fairness across demographic groups and responsible handling of personal health data, should remain central to any continued development.</p>
+<p>Overall, this study suggests that XGBoost can be an effective tool for analyzing survey-based mental-health data. Machine-learning approaches may provide timely insights that complement traditional assessment methods and support early identification of individuals who may benefit from targeted intervention. With further refinement and validation, predictive modeling has the potential to become an increasingly valuable component of mental-health research and practice.</p>
 </section>
 </section>
 <section id="references" class="level2 unnumbered">
