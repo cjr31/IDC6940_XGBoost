@@ -5045,6 +5045,79 @@ The relatively low standard deviation of <strong>0.0397</strong> shows that this
 </section>
 <section id="summary-of-modeling-results" class="level5">
 <h5 class="anchored" data-anchor-id="summary-of-modeling-results">Summary of Modeling Results</h5>
+<p>The XGBoost-based classification model demonstrated strong predictive performance, robust generalization, and meaningful interpretability when applied to the mental health diagnostic dataset. Despite the relatively small sample size (120 observations), the model effectively captured nonlinear relationships among the 17 clinical and behavioral features.</p>
+<p>The dataset was split into an 80/20 training–testing partition, with 96 observations used for model training and 24 held out for independent testing. Hyperparameter optimization was performed using a 5-fold stratified cross-validation procedure to preserve class distribution during training.</p>
+<p>A 30-point space-filling hyperparameter grid was used to efficiently explore the parameter space while preventing excessive computational cost. The grid spanned key parameters including the number of trees, tree depth, learning rate, loss reduction, minimum node size, subsampling proportion, and number of predictors considered at each split.</p>
+<p>The optimal hyperparameters, identified using the <code>select_best()</code> function based on ROC AUC, were:</p>
+<ul>
+<li><strong>mtry:</strong> 3<br>
+</li>
+<li><strong>trees:</strong> 627<br>
+</li>
+<li><strong>min_n:</strong> 2<br>
+</li>
+<li><strong>learn_rate:</strong> 0.165<br>
+</li>
+<li><strong>loss_reduction:</strong> 0.0034<br>
+</li>
+<li><strong>sample_size:</strong> 0.5655</li>
+</ul>
+<p>This configuration reflects a model with relatively shallow trees, moderate learning rate, and moderate subsampling—balancing flexibility and regularization.</p>
+<p>Across all resampled evaluations during tuning, the model achieved:</p>
+<ul>
+<li><strong>Accuracy:</strong> 0.654<br>
+</li>
+<li><strong>Kappa:</strong> 0.534<br>
+</li>
+<li><strong>Macro-weighted ROC AUC:</strong> 0.927</li>
+</ul>
+<p>The high ROC AUC indicates excellent discriminative ability, while the moderate accuracy and kappa reflect the inherent difficulty of separating four mental health classes with overlapping symptom profiles.</p>
+<p>Further resampling-based sensitivity analysis confirmed that the model’s performance is stable:</p>
+<ul>
+<li><strong>Mean Accuracy:</strong> 0.804<br>
+</li>
+<li><strong>SD Accuracy:</strong> 0.0821<br>
+</li>
+<li><strong>Mean ROC AUC:</strong> 0.957<br>
+</li>
+<li><strong>SD ROC AUC:</strong> 0.0397</li>
+</ul>
+<p>These results show strong robustness, with especially low variation in AUC values. The model’s ranking ability remains highly consistent even under data perturbations.</p>
+<p>XGBoost’s feature importance metrics and SHAP analyses highlighted meaningful and clinically relevant predictors. The top features contributing to model performance were:</p>
+<ol type="1">
+<li><strong>Mood Swing</strong><br>
+</li>
+<li><strong>Sadness</strong><br>
+</li>
+<li><strong>Aggressive Response</strong><br>
+</li>
+<li><strong>Exhausted</strong><br>
+</li>
+<li><strong>Euphoric</strong></li>
+</ol>
+<p>SHAP summary and waterfall plots revealed distinct contribution patterns across diagnostic categories. Emotional states (e.g., mood swings, sadness), cognitive symptoms (e.g., concentration issues, overthinking), and coping behaviors (e.g., ignoring problems, attempts at explanation) contributed differently across classes, indicating that the model relies on nuanced multidimensional patterns rather than single-feature drivers.</p>
+<p>On the independent 24-case test set, the model showed strong agreement with expert diagnoses:</p>
+<ul>
+<li><strong>Bipolar Type I:</strong> 4/6 cases correctly predicted (66.7%)<br>
+</li>
+<li><strong>Bipolar Type II:</strong> 5/7 cases correctly predicted (71.4%)<br>
+</li>
+<li><strong>Depression:</strong> 6/7 cases correctly predicted (85.7%)<br>
+</li>
+<li><strong>Normal:</strong> 4/6 cases correctly predicted (66.7%)</li>
+</ul>
+<p>The model successfully identified the majority of cases in each diagnostic category, demonstrating strong generalization to unseen data.</p>
+<p>The final XGBoost model delivered:</p>
+<ul>
+<li><strong>High discriminative performance</strong>, with ROC AUC &gt; 0.90 across cross-validation and sensitivity analyses<br>
+</li>
+<li><strong>Stable, robust generalization</strong>, supported by low performance variability<br>
+</li>
+<li><strong>Interpretable, clinically relevant insights</strong>, enabled by SHAP and feature importance<br>
+</li>
+<li><strong>Accurate classification</strong>, with strong performance across all four diagnostic groups on unseen data</li>
+</ul>
+<p>Overall, XGBoost proved to be an effective and interpretable modeling approach for mental health classification in a small structured dataset, delivering both predictive value and meaningful interpretability essential for clinical research.</p>
 </section>
 </section>
 <section id="conclusion" class="level3">

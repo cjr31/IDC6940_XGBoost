@@ -993,9 +993,69 @@ In summary, the sensitivity and robustness metrics indicate that the model behav
 
 ##### Summary of Modeling Results
 
-```{r}
+The XGBoost-based classification model demonstrated strong predictive performance, robust generalization, and meaningful interpretability when applied to the mental health diagnostic dataset. Despite the relatively small sample size (120 observations), the model effectively captured nonlinear relationships among the 17 clinical and behavioral features.
 
-```
+The dataset was split into an 80/20 training–testing partition, with 96 observations used for model training and 24 held out for independent testing. Hyperparameter optimization was performed using a 5-fold stratified cross-validation procedure to preserve class distribution during training.
+
+A 30-point space-filling hyperparameter grid was used to efficiently explore the parameter space while preventing excessive computational cost. The grid spanned key parameters including the number of trees, tree depth, learning rate, loss reduction, minimum node size, subsampling proportion, and number of predictors considered at each split.
+
+The optimal hyperparameters, identified using the `select_best()` function based on ROC AUC, were:
+
+- **mtry:** 3  
+- **trees:** 627  
+- **min_n:** 2  
+- **learn_rate:** 0.165  
+- **loss_reduction:** 0.0034  
+- **sample_size:** 0.5655  
+
+This configuration reflects a model with relatively shallow trees, moderate learning rate, and moderate subsampling—balancing flexibility and regularization.
+
+Across all resampled evaluations during tuning, the model achieved:
+
+- **Accuracy:** 0.654  
+- **Kappa:** 0.534  
+- **Macro-weighted ROC AUC:** 0.927  
+
+The high ROC AUC indicates excellent discriminative ability, while the moderate accuracy and kappa reflect the inherent difficulty of separating four mental health classes with overlapping symptom profiles.
+
+Further resampling-based sensitivity analysis confirmed that the model’s performance is stable:
+
+- **Mean Accuracy:** 0.804  
+- **SD Accuracy:** 0.0821  
+- **Mean ROC AUC:** 0.957  
+- **SD ROC AUC:** 0.0397  
+
+These results show strong robustness, with especially low variation in AUC values. The model’s ranking ability remains highly consistent even under data perturbations.
+
+XGBoost’s feature importance metrics and SHAP analyses highlighted meaningful and clinically relevant predictors. The top features contributing to model performance were:
+
+1. **Mood Swing**  
+2. **Sadness**  
+3. **Aggressive Response**  
+4. **Exhausted**  
+5. **Euphoric**
+
+SHAP summary and waterfall plots revealed distinct contribution patterns across diagnostic categories. Emotional states (e.g., mood swings, sadness), cognitive symptoms (e.g., concentration issues, overthinking), and coping behaviors (e.g., ignoring problems, attempts at explanation) contributed differently across classes, indicating that the model relies on nuanced multidimensional patterns rather than single-feature drivers.
+
+On the independent 24-case test set, the model showed strong agreement with expert diagnoses:
+
+- **Bipolar Type I:** 4/6 cases correctly predicted (66.7%)  
+- **Bipolar Type II:** 5/7 cases correctly predicted (71.4%)  
+- **Depression:** 6/7 cases correctly predicted (85.7%)  
+- **Normal:** 4/6 cases correctly predicted (66.7%)  
+
+The model successfully identified the majority of cases in each diagnostic category, demonstrating strong generalization to unseen data.
+
+The final XGBoost model delivered:
+
+- **High discriminative performance**, with ROC AUC > 0.90 across cross-validation and sensitivity analyses  
+- **Stable, robust generalization**, supported by low performance variability  
+- **Interpretable, clinically relevant insights**, enabled by SHAP and feature importance  
+- **Accurate classification**, with strong performance across all four diagnostic groups on unseen data  
+
+Overall, XGBoost proved to be an effective and interpretable modeling approach for mental health classification in a small structured dataset, delivering both predictive value and meaningful interpretability essential for clinical research.
+
+
 
 ### Conclusion
 
