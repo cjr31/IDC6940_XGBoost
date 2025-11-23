@@ -758,6 +758,7 @@ X_train_matrix <- as.matrix(X_train)
 
 ```
 
+
 ```{r}
 # Compute SHAP values
 
@@ -783,27 +784,27 @@ The SHAP value plot provides insight into how each predictor contributes to the 
 A few features show high average absolute SHAP values across multiple classes, indicating broad predictive power:
 
 - **Mood.Swing**  
-  This feature exhibits the largest SHAP magnitude overall, particularly for **Class_2** and **Class_1**. Its prominence suggests that variability in mood plays a central role in distinguishing class patterns.
+  This feature exhibits the largest SHAP magnitude overall, particularly for **Bipolar Type-2** and **Bipolar Type-1**. Its prominence suggests that variability in mood plays a central role in distinguishing class patterns.
 
 - **Suicidal.thoughts**  
-  This feature contributes heavily, especially for **Class_3** and **Class_2**, indicating that the presence or intensity of suicidal thoughts is highly informative for separating these groups.
+  This feature contributes heavily, especially for **Depression** and **Bipolar Type-2**, indicating that the presence or intensity of suicidal thoughts is highly informative for separating these groups.
 
 - **Sadness**  
-  Sadness emerges as a strong differentiator for **Class_1**, suggesting that this emotional state carries notable weight in class identification for this group.
+  Sadness emerges as a strong differentiator for **Bipolar Type-1**, suggesting that this emotional state carries notable weight in class identification for this group.
 
 Some predictors exhibit strong influence for specific classes, reflecting how the model uses distinct emotional, cognitive, or behavioral signals:
 
 - **Concentration_Cat.2**  
-  Particularly influential for **Class_4**, implying that concentration-related difficulties help distinguish this class.
+  Particularly influential for **Normal**, implying that concentration-related difficulties help distinguish this class.
 
 - **Authority.Respect**  
-  Most impactful for **Class_2**, suggesting that attitudes toward authority meaningfully guide predictions for this group.
+  Most impactful for **Bipolar Type-2**, suggesting that attitudes toward authority meaningfully guide predictions for this group.
 
 - **Ignore...Move.On**  
-  Shows notable influence for **Class_4**, indicating that coping style differences contribute to distinguishing this class.
+  Shows notable influence for **Normal**, indicating that coping style differences contribute to distinguishing this class.
 
 - **Exhausted**  
-  More influential for **Class_4** than others, highlighting fatigue-related symptoms as a distinguishing factor.
+  More influential for **Normal** than others, highlighting fatigue-related symptoms as a distinguishing factor.
 
 Several features provide moderate but consistent contributions across classes:
 
@@ -832,7 +833,7 @@ sv_waterfall(sv, row_index = i)
 
 The SHAP waterfall charts illustrate how individual feature values contribute to the predicted score for each class by showing how the model moves from the baseline expectation \(E[f(x)]\) to the final class-specific output \(f(x)\). These plots highlight the most influential features driving the model’s decision for each class.
 
-For **Class_1**, the model predicts a relatively high output value, with the final prediction rising substantially above the baseline \(E[f(x)] = 1.01\). This indicates strong support in favor of Class_1 for this instance.
+For **Bipolar Type-1**, the model predicts a relatively high output value, with the final prediction rising substantially above the baseline \(E[f(x)] = 1.01\). This indicates strong support in favor of Bipolar Type-1 (Class_1) for this instance.
 
 Key positive contributors include:
 
@@ -844,9 +845,9 @@ Key positive contributors include:
 
 These features collectively push the prediction upward, suggesting that emotional variability, sadness, and the presence of suicidal thoughts are among the strongest drivers toward this class in this specific observation. Minor negative contributions appear (e.g., Sleep.disorder = 3), but the dominant pattern is positive.
 
-Overall, the waterfall shows that **Class_1 receives strong cumulative support** from several major emotional and behavioral indicators.
+Overall, the waterfall shows that **Bipolar Type-1 receives strong cumulative support** from several major emotional and behavioral indicators.
 
-For **Class_2**, the final predicted score \(f(x) = 1.11\) is lower than the class baseline of \(E[f(x)] = 2.43\), meaning the model moves away from predicting Class_2 for this instance.
+For **Bipolar Type-2**, the final predicted score \(f(x) = 1.11\) is lower than the class baseline of \(E[f(x)] = 2.43\), meaning the model moves away from predicting Bipolar Type-2 (Class_2) for this instance.
 
 Major **positive** contributions:
 
@@ -862,9 +863,9 @@ Major **negative** contributions:
 - **Nervous.Breakdown = 1** (–0.77)  
 - **Admit.Mistakes = 0** (–0.70)
 
-Although there are strong positive drivers, they are outweighed by multiple negative influences. This results in a net downward movement from the class baseline, indicating that **Class_2 is not well supported** for this observation relative to Class_1.
+Although there are strong positive drivers, they are outweighed by multiple negative influences. This results in a net downward movement from the class baseline, indicating that **Bipolar Type-2 is not well supported** for this observation relative to Bipolar Type-1.
 
-The **Class_3** prediction moves from a baseline of \(E[f(x)] = 1.11\) to a final prediction of \(f(x) = -0.298\), a substantial downward shift indicating **strong evidence against** Class_3 for this instance.
+The **Depression** prediction moves from a baseline of \(E[f(x)] = 1.11\) to a final prediction of \(f(x) = -0.298\), a substantial downward shift indicating **strong evidence against** Depression (Class_3) for this instance.
 
 Key contributions include:
 
@@ -880,9 +881,9 @@ Negative:
 - **Anorexia = 1** (–0.71)  
 - **Admit.Mistakes = 0** (–0.64)
 
-The single strong positive contribution is overwhelmed by numerous moderately sized negatives. This creates a consistent downward trajectory, showing that the feature profile **does not align well with the Class_3 pattern**.
+The single strong positive contribution is overwhelmed by numerous moderately sized negatives. This creates a consistent downward trajectory, showing that the feature profile **does not align well with the Depression pattern**.
 
-The prediction for **Class_4** moves from a baseline of \(E[f(x)] = 0.174\) up to \(f(x) = 1.37\), indicating **support for Class_4**, though not as strongly as Class_1.
+The prediction for **Normal** moves from a baseline of \(E[f(x)] = 0.174\) up to \(f(x) = 1.37\), indicating **support for (Normal (Class_4)**, though not as strongly as Bipolar Type-1.
 
 Key contributions:
 
@@ -901,8 +902,8 @@ Despite some significant negative pushes—particularly from Mood.Swing—the po
 
 Across all four classes, the waterfall charts highlight:
 
-- **Class_1 and Class_4 receive positive net support**, with Class_1 showing the strongest alignment.  
-- **Class_2 and Class_3 predictions decline from their baselines**, indicating weaker support relative to other classes.  
+- **Bipolar Type-1 and Normal receive positive net support**, with Bipolar Type-1 showing the strongest alignment.  
+- **Bipolar Type-2 and Depression predictions decline from their baselines**, indicating weaker support relative to other classes.  
 - Emotional and cognitive features such as **Mood Swing, Sadness, Suicidal Thoughts, Concentration issues, and coping styles** consistently emerge as major contributors—though with different directions depending on the class.  
 - The model distinguishes classes by the *pattern* of contributions rather than reliance on any single feature.
 
