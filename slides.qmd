@@ -19,68 +19,100 @@ editor:
 ---
 ## Introduction  {.smaller}
 
--   Develop a storyline that captures attention and maintains interest.
+eXtreme Gradient Boosting (XGB) algorithm
+- A supervised machine learning algorithm
+- Modification of Gradient Boosting Framework
+- Ensemble of weak decision trees
+- L1,L2 regularization
+- High performance, speed, scalability
+- Applications in healthcare, education, public health, finance, and engineering.
 
--   Your audience is your peers
+## Introduction into Project
 
--   Clearly state the problem or question you're addressing.
+XGBoost for mental disorder classification
+- Using XGBoost on clinical and survey data
+- Classification of individuals into one of four categories: Bipolar I Disorder, Bipolar II Disorder, Major Depressive Disorder, and Normal
+- XGBoosts proves to be a suitable algorithm for the problem
 
--   Introduce why it is relevant needs.
+## Literature Review in Healthcare
 
--   Provide an overview of your approach.
-
-In kernel estimator, weight function is known as kernel function
-[@efr2008]. Cite this paper [@bro2014principal]. The GEE [@wang2014].
-The PCA [@daffertshofer2004pca]\*
-
-## Methods
-
--   Detail the models or algorithms used.
-
--   Justify your choices based on the problem and data.
+eXtreme Gradient Boosting (XGBoost) in healthcare
+– XGBoost strengths in real world problems handling class imbalance, heterogeneous data types, or non-linear relationships. [@chen2016xgboost]
+– XGBoost combined with DL for breast cancer classification with high reliability. [@liew2021breast]
+– XGBoost with biomarker data to improve depression diagnoses in a large Dutch population dataset.[@sharma2020depression]
+– XGBoost to multi-modal datasets to predict self-harm in young adults.[@xu2024selfharm]
+–A hybrid algorithm (XGBoost-HOA) to classify depression, anxiety, and stress
+–Dual XGBoost models applied to distinguish between deficit and non-deficit schizophrenia subtypes using   fMRI features.[@zhang2022imbalanced]
+–XGBoost compared with linear regression in predicting depression among refugee children.[@saleh2024child] 
 
 
+## Literature Review of Limitations
+
+XGBoost limitations for imbalance data
+–handled by optimization techniques [@zhang2022imbalanced]
+– Handled by balancing the class distribution [@sharma2020depression]
+– Preprocessing and hyperparameter tuning importance in imbalance data for accurate XGBoost algorithm.
+
+## Literature Review in Education & Public Health
+
+XGBoost in Education
+–XGBoost in academic prediction models [@hu2019academic]
+–XGBoost out performing traditional logistic regression models in predicting learner performance [@hakkal2024education].
+XGBoost in Public health
+– XGBoost used to predict daily COVID-19 cases in the United States.[@fang2022covid]
+– A hybrid model integrating XGBoost, Random Forest, and Antlion Optimization used to predict infectious disease outbreaks.[@sivakumar2023prediction]
+
+## Literature Review in Finance & Pharmaceuticals
+
+XGBoost in financial sector
+– XGBoost model’s ability to rank feature importance and prevent overfitting using regularization made it a top performer in credit risk prediction tasks[@li2020xgboost]
+– XGBoost to forecast volatility in the U.S. stock market, identifying the Economic Policy Uncertainty Index as a critical predictor.[@fomunyam2023impact]
+
+XGBoost In pharmaceutical research
+– Application of XGBoost in drug development.[@wiens2025drugdev]
+
+## Literature Review in Eudcation Diagnostics & Sports Analytics
+
+XGBoost in educational diagnostics and sports analytics.
+– XGBoost enhanced learner performance prediction and knowledge tracing on platforms like ASSIST09 and Algebra08. [@su2023knowledge] and [@hakkal2024education]
+– XGBoost used to predict ultramarathon running speeds based on demographics and environmental factors.[@nikolaidis2023ultramarathon]
+
+
+## Methods: Extreme Gradient Boosting (XGBoost)
+
+- Ensemble of weak decision trees
+- Trained sequentially, each tree corrects previous errors
+- Captures non-linear relationships within the 17-variable dataset
+- Uses gradient descent to minimize loss
+- Includes regularization to prevent overfitting
+
+## Methods: XGBoost Formulas
+
+- Loss term: Measures prediction error
+- Regularization term: Penalizes model complexity
+- Ensures balance between accuracy and generalization
+
+$$
+\text{Obj} = \sum_{i=1}^{n} L(y_i, \hat{y}_i) + \sum_{k=1}^{K} \Omega(f_k)
+$$
 
 ## Data Exploration and Visualization
 
--   Describe your data sources and collection process.
-
--   Present initial findings and insights through visualizations.
-
--   Highlight unexpected patterns or anomalies.
+- Sourced from Kaggle (2023 clinical records)
+- 120 individuals assessed for mental disorders
+-Labels:
+   -Normal
+   -Bipolar Type I
+   -Bipolar Type II
+   -Depression
+- 17 diagnostic variables
+- Mix of clinical, behavioral, demographic factors
 
 ## Data Exploration and Visualization {.smaller}
 
-A study was conducted to determine how...
-
-```{r, warning=FALSE, echo=F, message=FALSE}
-# loading packages 
-library(tidyverse)
-library(knitr)
-library(ggthemes)
-library(ggrepel)
-library(dslabs)
-```
-
-```{r, warning=FALSE, echo=F}
-# Load Data
-#kable(head(murders))
-
-ggplot1 = murders %>% ggplot(mapping = aes(x=population/10^6, y=total)) 
-
-  ggplot1 + geom_point(aes(col=region), size = 4) +
-  geom_text_repel(aes(label=abb)) +
-  scale_x_log10() +
-  scale_y_log10() +
-  geom_smooth(formula = "y~x", method=lm,se = F)+
-  xlab("Populations in millions (log10 scale)") + 
-  ylab("Total number of murders (log10 scale)") +
-  ggtitle("US Gun Murders in 2010") +
-  scale_color_discrete(name = "Region")+
-      theme_bw()
-  
-
-```
+- Examined class distribution
+- Identified potential imbalance or outliers
+- Explored correlations between features
 
 ## Modeling and Results
 
@@ -96,10 +128,39 @@ ggplot1 = murders %>% ggplot(mapping = aes(x=population/10^6, y=total))
 
 ```
 
-## Conclusion
+## Conclusion: Study Purpose
 
--   Summarize your key findings.
+• Evaluate effectiveness of XGBoost for predicting mental health outcomes.
+• Develop, tune, and validate the model.
+• Identify highest‑predictive features and assess ability to capture non‑linear relationships.
+• Model showed strong accuracy and generalizability.
 
--   Discuss the implications of your results.
+## Conclusion: Key Findings
+
+• Top predictors: stress indicators, behavioral patterns, wellness factors.
+• High feature importance suggests relevance to mental‑health risk.
+• Model effectively distinguished between classes.
+• Stable performance across tuning configurations with minimal overfitting.
+
+## Conclusion: Implications
+
+•XGBoost shows potential for early warning mental‑health monitoring.
+•Useful for identifying at‑risk individuals based on survey data.
+•Self‑reported data may introduce bias—interpret with care.
+
+## Conclusion: Future Work
+
+• Use larger and more diverse datasets.
+• Incorporate behavioral or time‑based variables.
+• Compare with Random Forest, LightGBM, neural networks.
+• Test in real‑world settings.
+• Address fairness and ethical use of health data.
+
+## Conclusion: Overview
+
+• XGBoost is effective for survey‑based mental‑health prediction.
+• Provides fast and interpretable insights alongside traditional assessments.
+• Predictive modeling could expand tools for mental‑health research and practice.
+
 
 ## References
