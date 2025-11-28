@@ -17,6 +17,32 @@ editor:
   markdown: 
     wrap: 72
 ---
+```{r}
+#| include: false
+# Load libraries
+library(knitr)
+library(tidyverse)
+library(xgboost)
+library(ggplot2)
+library(DataExplorer)
+library(dplyr)
+library(tidyr)
+library(kableExtra)
+library(vcd)
+library(reshape2)
+library(FSelectorRcpp)
+library(magrittr) 
+library(tidymodels)
+library(iml)
+library(vip)
+library(shapviz)
+library(recipes)
+library(purrr)
+library(rsample)
+library(yardstick)
+library(gt)
+```
+
 ## Introduction  {.smaller}
 
 #### eXtreme Gradient Boosting (XGB) algorithm
@@ -122,30 +148,62 @@ $$
 #### Data Preprocessing
 To facilitate analysis, all categorical variables in the dataset were transformed into numerical or grouped categorical formats in Excel. The transformations were applied as follows:
 
-* **Ordinal Frequency Responses** (e.g., *Sadness*, *Euphoric*, *Exhausted*):
+- Ordinal responses (Sadness, Euphoric, Exhausted) recoded:
+  - Seldom=1, Sometimes=2, Usually=3, Most-Often=4
+- Binary items (Suicidal Thoughts, Mood Swing):
+  - Yes=1, No=0
+- 1–10 rating scales (Sexual Activity, Optimism) grouped:
+  - 1–3 → Cat 1, 4–6 → Cat 2, 7–9 → Cat 3
+  
+## Modeling and Results {.smaller}
 
-  * *Seldom* → 1
-  * *Sometimes* → 2
-  * *Usually* → 3
-  * *Most-Often* → 4
+#### Hyperparameter Optimization
 
-* **Binary Responses** (e.g., *Suicidal Thoughts*, *Mood Swing*):
+- The dataset was randomly partitioned into an 80/20 training–testing split. 
+  - This split resulted in 96 patient surveys used for model training and 24 surveys reserved for independent testing. 
+  - The predictive target for all models was the expert clinical diagnosis
+  
+- An XGBoost model specification was created using the tidymodels framework where all major hyperparameters were set to be tuned including:
+      - the number of trees
+      - tree depth 
+      - learning rate 
+      - loss reduction, 
+      - minimum node size
+      - subsampling rate
+      - number of predictors considered at each split 
+      
+## Modeling and Results {.smaller}
 
-  * *Yes* → 1
-  * *No* → 0
+#### Hyperparameter Optimization
 
-* **Scaled Ratings (1–10)** (e.g., *Sexual Activity*, *Optimism*):
-  These were grouped into three categorical levels to simplify analysis:
+- Five-fold stratified cross-validation was used for hyperparameter tuning. 
+  - Where the training dataset was partitioned into five equally sized folds
+  - For each tuning iteration: 
+      - Models were trained on four folds 
+      - Validated on the remaining fold
+      - Which ensured stable and unbiased performance estimates
 
-  * Ratings **1–3** → *Category 1*
-  * Ratings **4–6** → *Category 2*
-  * Ratings **7–9** → *Category 3*
-
-These transformations standardized the dataset, allowing for easier correlation analysis, visualizations, and model input compatibility.
+![Five Fold Validation](Five Fold Validation.png)[@singh2024crossvalidation_image]
 
 ## Modeling and Results {.smaller}
 
 #### Hyperparameter Optimization
+- The final hyperparameter grid consists of 30 candidate hyperparameter combination which was constructed using a space-filling design. 
+  - Model performance was assessed using accuracy and the area under the ROC curve (ROC AUC).
+  - Visualizing the tuning results revealed the ROC AUC versus number of trees plot indicated that the optimal tree depth was approximately 2, suggesting that relatively shallow trees generalized best for this dataset. 
+  - Model performance increased steadily with the number of boosting iterations, with the highest ROC AUC occurring at around 625 trees. At this configuration, the model achieved an accuracy exceeding 0.80 and a ROC AUC greater than 0.90, indicating strong discriminatory performance.
+
+![VisulizationTuningResults](VisulizationTuningResults.png)
+
+## Modeling and Results {.smaller}
+
+#### Hyperparameter Optimization
+- The select_best() function from the tidymodels framework was used to systematically extract the hyperparameter combination that achieved the highest ROC AUC across all resampled evaluations.
+
+- The resulting optimal configuration included 3 predictors (mtry = 3), 627 boosting iterations, a minimum node size (min_n) of 2, a learning rate of 0.16501, a loss-reduction parameter of 0.0034, and a subsample proportion of 0.5655. 
+  - This combination represents the tuning grid entry labeled pre0_mod06_post0, which achieved the best balance between model complexity and predictive performance during cross-validation.
+
+![BestParams](BestParams.png)
 
 ## Modeling and Results {.smaller}
 
