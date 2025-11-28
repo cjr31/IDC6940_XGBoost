@@ -209,6 +209,29 @@ To facilitate analysis, all categorical variables in the dataset were transforme
 
 #### Model Evaluation & Performance
 
+![Prediction](Prediction.png)
+
+The model's predictions on the held-out test set showed strong agreement with the expert diagnoses. Specifically:
+
+- **Bipolar Type-1:** 4 of 6 cases were correctly predicted (66.7%)  
+- **Bipolar Type-2:** 5 of 7 cases were correctly predicted (71.4%)  
+- **Depression:** 6 of 7 cases were correctly predicted (85.7%)  
+- **Normal:** 4 of 6 cases were correctly predicted (66.7%)  
+
+## Modeling and Results {.smaller}
+
+#### Model Evaluation & Performance
+
+The XGBoost multiclass classification model demonstrates **moderate overall predictive performance**, with room for improvement but also several encouraging indicators of discriminative ability.
+- **Accuracy:** 0.654  
+  An accuracy of **65.4%** suggests that the model correctly classifies roughly two-thirds of the observations.
+- **Kappa:** 0.534  
+  The Kappa value of **0.534** reflects **moderate agreement** between the model’s predictions and the true class labels after accounting for chance. 
+- **ROC AUC (macro-weighted):** 0.927  
+  The macro-weighted ROC AUC of **0.927** suggests that the model does a strong job of ranking observations correctly across all classes, even if it occasionally makes incorrect final class assignments. 
+
+Taken together, the metrics indicate that the model has **strong underlying discriminative power (high AUC)** but **moderate final classification performance (accuracy and kappa)**.
+
 ## Modeling and Results {.smaller}
 
 #### Feature Importance & Interepretability
