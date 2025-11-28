@@ -444,7 +444,6 @@
   <meta name="generator" content="quarto-1.5.57">
 
   <meta name="author" content="Aabiya Mansoor, Abigail Penza Jackson, Corina Rich, Madelyn Champion (Advisor: Dr. Cohen)">
-  <meta name="dcterms.date" content="2025-11-28">
   <title>XG Boost in Mental Health Classification</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1175,38 +1174,88 @@ Aabiya Mansoor, Abigail Penza Jackson, Corina Rich, Madelyn Champion (Advisor: D
 </div>
 </div>
 
-  <p class="date">2025-11-28</p>
+  <p class="date">Invalid Date</p>
 </section>
 <section id="introduction" class="slide level2 smaller">
 <h2>Introduction</h2>
-<p>eXtreme Gradient Boosting (XGB) algorithm - A supervised machine learning algorithm - Modification of Gradient Boosting Framework - Ensemble of weak decision trees - L1,L2 regularization - High performance, speed, scalability - Applications in healthcare, education, public health, finance, and engineering.</p>
+<h4 id="extreme-gradient-boosting-xgb-algorithm">eXtreme Gradient Boosting (XGB) algorithm</h4>
+<ul>
+<li>A supervised machine learning algorithm</li>
+<li>Modification of Gradient Boosting Framework</li>
+<li>Ensemble of weak decision trees</li>
+<li>L1,L2 regularization</li>
+<li>High performance, speed, scalability</li>
+<li>Applications in healthcare, education, public health, finance, and engineering.</li>
+</ul>
 </section>
-<section id="introduction-into-project" class="slide level2">
-<h2>Introduction into Project</h2>
-<p>XGBoost for mental disorder classification - Using XGBoost on clinical and survey data - Classification of individuals into one of four categories: Bipolar I Disorder, Bipolar II Disorder, Major Depressive Disorder, and Normal - XGBoosts proves to be a suitable algorithm for the problem</p>
+<section id="introduction-1" class="slide level2 smaller">
+<h2>Introduction</h2>
+<h4 id="xgboost-for-mental-disorder-classification">XGBoost for mental disorder classification</h4>
+<ul>
+<li>Using XGBoost on clinical and survey data</li>
+<li>Classification of individuals into one of four categories: Bipolar I Disorder, Bipolar II Disorder, Major Depressive Disorder, and Normal</li>
+<li>XGBoosts proves to be a suitable algorithm for the problem</li>
+</ul>
 </section>
-<section id="literature-review-in-healthcare" class="slide level2">
-<h2>Literature Review in Healthcare</h2>
-<p>eXtreme Gradient Boosting (XGBoost) in healthcare - XGBoost strengths in real world problems handling class imbalance, heterogeneous data types, or non-linear relationships. <span class="citation" data-cites="chen2016xgboost">(<a href="#/references" role="doc-biblioref" onclick>Chen and Guestrin 2016</a>)</span> - XGBoost combined with DL for breast cancer classification with high reliability. <span class="citation" data-cites="liew2021breast">(<a href="#/references" role="doc-biblioref" onclick>Liew, Hameed, and Clos 2021</a>)</span> - XGBoost with biomarker data to improve depression diagnoses in a large Dutch population dataset.<span class="citation" data-cites="sharma2020depression">(<a href="#/references" role="doc-biblioref" onclick>Sharma and Verbeke 2020</a>)</span> - XGBoost to multi-modal datasets to predict self-harm in young adults.<span class="citation" data-cites="xu2024selfharm">(<a href="#/references" role="doc-biblioref" onclick>Xu et al. 2024</a>)</span> - A hybrid algorithm (XGBoost-HOA) to classify depression, anxiety, and stress - Dual XGBoost models applied to distinguish between deficit and non-deficit schizophrenia subtypes using fMRI features.<span class="citation" data-cites="zhang2022imbalanced">(<a href="#/references" role="doc-biblioref" onclick>Zhang, Jia, and Shang 2022</a>)</span> - XGBoost compared with linear regression in predicting depression among refugee children.<span class="citation" data-cites="saleh2024child">(<a href="#/references" role="doc-biblioref" onclick>Saleh et al. 2024</a>)</span></p>
+<section id="literature-review" class="slide level2 smaller">
+<h2>Literature Review</h2>
+<h4 id="extreme-gradient-boosting-xgboost-in-healthcare">eXtreme Gradient Boosting (XGBoost) in healthcare</h4>
+<ul>
+<li>XGBoost strengths in real world problems handling class imbalance, heterogeneous data types, or non-linear relationships. <span class="citation" data-cites="chen2016xgboost">(<a href="#/references" role="doc-biblioref" onclick>Chen and Guestrin 2016</a>)</span></li>
+<li>XGBoost combined with DL for breast cancer classification with high reliability. <span class="citation" data-cites="liew2021breast">(<a href="#/references" role="doc-biblioref" onclick>Liew, Hameed, and Clos 2021</a>)</span></li>
+<li>XGBoost with biomarker data to improve depression diagnoses in a large Dutch population dataset.<span class="citation" data-cites="sharma2020depression">(<a href="#/references" role="doc-biblioref" onclick>Sharma and Verbeke 2020</a>)</span></li>
+<li>XGBoost to multi-modal datasets to predict self-harm in young adults.<span class="citation" data-cites="xu2024selfharm">(<a href="#/references" role="doc-biblioref" onclick>Xu et al. 2024</a>)</span></li>
+<li>A hybrid algorithm (XGBoost-HOA) to classify depression, anxiety, and stress</li>
+<li>Dual XGBoost models applied to distinguish between deficit and non-deficit schizophrenia subtypes using fMRI features.<span class="citation" data-cites="zhang2022imbalanced">(<a href="#/references" role="doc-biblioref" onclick>Zhang, Jia, and Shang 2022</a>)</span></li>
+<li>XGBoost compared with linear regression in predicting depression among refugee children.<span class="citation" data-cites="saleh2024child">(<a href="#/references" role="doc-biblioref" onclick>Saleh et al. 2024</a>)</span></li>
+</ul>
 </section>
-<section id="literature-review-of-limitations" class="slide level2">
-<h2>Literature Review of Limitations</h2>
-<p>XGBoost limitations for imbalance data - handled by optimization techniques <span class="citation" data-cites="zhang2022imbalanced">(<a href="#/references" role="doc-biblioref" onclick>Zhang, Jia, and Shang 2022</a>)</span> - Handled by balancing the class distribution <span class="citation" data-cites="sharma2020depression">(<a href="#/references" role="doc-biblioref" onclick>Sharma and Verbeke 2020</a>)</span> - Preprocessing and hyperparameter tuning importance in imbalance data for accurate XGBoost algorithm.</p>
+<section id="literature-review-1" class="slide level2 smaller">
+<h2>Literature Review</h2>
+<h4 id="xgboost-limitations-for-imbalance-data">XGBoost limitations for imbalance data</h4>
+<ul>
+<li>handled by optimization techniques <span class="citation" data-cites="zhang2022imbalanced">(<a href="#/references" role="doc-biblioref" onclick>Zhang, Jia, and Shang 2022</a>)</span></li>
+<li>Handled by balancing the class distribution <span class="citation" data-cites="sharma2020depression">(<a href="#/references" role="doc-biblioref" onclick>Sharma and Verbeke 2020</a>)</span></li>
+<li>Preprocessing and hyperparameter tuning importance in imbalance data for accurate XGBoost algorithm.</li>
+</ul>
 </section>
-<section id="literature-review-in-education-public-health" class="slide level2">
-<h2>Literature Review in Education &amp; Public Health</h2>
-<p>XGBoost in Education - XGBoost in academic prediction models <span class="citation" data-cites="hu2019academic">(<a href="#/references" role="doc-biblioref" onclick>Hu and Song 2019</a>)</span> - XGBoost out performing traditional logistic regression models in predicting learner performance <span class="citation" data-cites="hakkal2024education">(<a href="#/references" role="doc-biblioref" onclick>Hakkal and Ait Lahcen 2024</a>)</span>. XGBoost in Public health - XGBoost used to predict daily COVID-19 cases in the United States.<span class="citation" data-cites="fang2022covid">(<a href="#/references" role="doc-biblioref" onclick>Fang et al. 2022</a>)</span> - A hybrid model integrating XGBoost, Random Forest, and Antlion Optimization used to predict infectious disease outbreaks.<span class="citation" data-cites="sivakumar2023prediction">(<a href="#/references" role="doc-biblioref" onclick>Sivakumar and Elangovan 2023</a>)</span></p>
+<section id="literature-review-2" class="slide level2 smaller">
+<h2>Literature Review</h2>
+<h4 id="xgboost-in-education">XGBoost in Education</h4>
+<ul>
+<li>XGBoost in academic prediction models <span class="citation" data-cites="hu2019academic">(<a href="#/references" role="doc-biblioref" onclick>Hu and Song 2019</a>)</span></li>
+<li>XGBoost out performing traditional logistic regression models in predicting learner performance <span class="citation" data-cites="hakkal2024education">(<a href="#/references" role="doc-biblioref" onclick>Hakkal and Ait Lahcen 2024</a>)</span>.</li>
+</ul>
+<h4 id="xgboost-in-public-health">XGBoost in Public health</h4>
+<ul>
+<li>XGBoost used to predict daily COVID-19 cases in the United States.<span class="citation" data-cites="fang2022covid">(<a href="#/references" role="doc-biblioref" onclick>Fang et al. 2022</a>)</span></li>
+<li>A hybrid model integrating XGBoost, Random Forest, and Antlion Optimization used to predict infectious disease outbreaks.<span class="citation" data-cites="sivakumar2023prediction">(<a href="#/references" role="doc-biblioref" onclick>Sivakumar and Elangovan 2023</a>)</span></li>
+</ul>
 </section>
-<section id="literature-review-in-finance-pharmaceuticals" class="slide level2">
-<h2>Literature Review in Finance &amp; Pharmaceuticals</h2>
-<p>XGBoost in financial sector - XGBoost model’s ability to rank feature importance and prevent overfitting using regularization made it a top performer in credit risk prediction tasks<span class="citation" data-cites="li2020xgboost">(<a href="#/references" role="doc-biblioref" onclick>Li et al. 2020</a>)</span> - XGBoost to forecast volatility in the U.S. stock market, identifying the Economic Policy Uncertainty Index as a critical predictor.<span class="citation" data-cites="fomunyam2023impact">(<a href="#/references" role="doc-biblioref" onclick>Fomunyam 2023</a>)</span></p>
-<p>XGBoost In pharmaceutical research - Application of XGBoost in drug development.<span class="citation" data-cites="wiens2025drugdev">(<a href="#/references" role="doc-biblioref" onclick>Wiens et al. 2025</a>)</span></p>
+<section id="literature-review-3" class="slide level2 smaller">
+<h2>Literature Review</h2>
+<h4 id="xgboost-in-financial-sector">XGBoost in financial sector</h4>
+<ul>
+<li>XGBoost model’s ability to rank feature importance and prevent overfitting using regularization made it a top performer in credit risk prediction tasks<span class="citation" data-cites="li2020xgboost">(<a href="#/references" role="doc-biblioref" onclick>Li et al. 2020</a>)</span></li>
+<li>XGBoost to forecast volatility in the U.S. stock market, identifying the Economic Policy Uncertainty Index as a critical predictor.<span class="citation" data-cites="fomunyam2023impact">(<a href="#/references" role="doc-biblioref" onclick>Fomunyam 2023</a>)</span></li>
+</ul>
+<h4 id="xgboost-in-pharmaceutical-research">XGBoost In pharmaceutical research</h4>
+<ul>
+<li>Application of XGBoost in drug development.<span class="citation" data-cites="wiens2025drugdev">(<a href="#/references" role="doc-biblioref" onclick>Wiens et al. 2025</a>)</span></li>
+</ul>
 </section>
-<section id="literature-review-in-eudcation-diagnostics-sports-analytics" class="slide level2">
-<h2>Literature Review in Eudcation Diagnostics &amp; Sports Analytics</h2>
-<p>XGBoost in educational diagnostics and sports analytics. - XGBoost enhanced learner performance prediction and knowledge tracing on platforms like ASSIST09 and Algebra08. <span class="citation" data-cites="su2023knowledge">(<a href="#/references" role="doc-biblioref" onclick>Su et al. 2023</a>)</span> and <span class="citation" data-cites="hakkal2024education">(<a href="#/references" role="doc-biblioref" onclick>Hakkal and Ait Lahcen 2024</a>)</span> - XGBoost used to predict ultramarathon running speeds based on demographics and environmental factors.<span class="citation" data-cites="nikolaidis2023ultramarathon">(<a href="#/references" role="doc-biblioref" onclick>Nikolaidis, Knechtle, and co-authors 2023</a>)</span></p>
+<section id="literature-review-4" class="slide level2 smaller">
+<h2>Literature Review</h2>
+<h4 id="xgboost-in-educational-diagnostics">XGBoost in educational diagnostics</h4>
+<ul>
+<li>XGBoost enhanced learner performance prediction and knowledge tracing on platforms like ASSIST09 and Algebra08. <span class="citation" data-cites="su2023knowledge">(<a href="#/references" role="doc-biblioref" onclick>Su et al. 2023</a>)</span> and <span class="citation" data-cites="hakkal2024education">(<a href="#/references" role="doc-biblioref" onclick>Hakkal and Ait Lahcen 2024</a>)</span></li>
+</ul>
+<h4 id="xgboost-in-sports-analytics">XGBoost in Sports Analytics</h4>
+<ul>
+<li>XGBoost used to predict ultramarathon running speeds based on demographics and environmental factors.<span class="citation" data-cites="nikolaidis2023ultramarathon">(<a href="#/references" role="doc-biblioref" onclick>Nikolaidis, Knechtle, and co-authors 2023</a>)</span></li>
+</ul>
 </section>
-<section id="methods-extreme-gradient-boosting-xgboost" class="slide level2">
+<section id="methods-extreme-gradient-boosting-xgboost" class="slide level2 smaller">
 <h2>Methods: Extreme Gradient Boosting (XGBoost)</h2>
 <ul>
 <li>Ensemble of weak decision trees</li>
@@ -1216,7 +1265,7 @@ Aabiya Mansoor, Abigail Penza Jackson, Corina Rich, Madelyn Champion (Advisor: D
 <li>Includes regularization to prevent overfitting</li>
 </ul>
 </section>
-<section id="methods-xgboost-formulas" class="slide level2">
+<section id="methods-xgboost-formulas" class="slide level2 smaller">
 <h2>Methods: XGBoost Formulas</h2>
 <ul>
 <li>Loss term: Measures prediction error</li>
@@ -1227,7 +1276,7 @@ Aabiya Mansoor, Abigail Penza Jackson, Corina Rich, Madelyn Champion (Advisor: D
 \text{Obj} = \sum_{i=1}^{n} L(y_i, \hat{y}_i) + \sum_{k=1}^{K} \Omega(f_k)
 \]</span></p>
 </section>
-<section id="data-exploration-and-visualization" class="slide level2">
+<section id="data-exploration-and-visualization" class="slide level2 smaller">
 <h2>Data Exploration and Visualization</h2>
 <ul>
 <li>Sourced from Kaggle (2023 clinical records)</li>
@@ -1244,16 +1293,53 @@ Aabiya Mansoor, Abigail Penza Jackson, Corina Rich, Madelyn Champion (Advisor: D
 <li>Explored correlations between features</li>
 </ul>
 </section>
-<section id="modeling-and-results" class="slide level2">
+<section id="modeling-and-results" class="slide level2 smaller">
 <h2>Modeling and Results</h2>
+<h4 id="data-preprocessing">Data Preprocessing</h4>
+<p>To facilitate analysis, all categorical variables in the dataset were transformed into numerical or grouped categorical formats in Excel. The transformations were applied as follows:</p>
 <ul>
-<li><p>Explain your data preprocessing and cleaning steps.</p></li>
-<li><p>Present your key findings in a clear and concise manner.</p></li>
-<li><p>Use visuals to support your claims.</p></li>
-<li><p><strong>Tell a story about what the data reveals.</strong></p></li>
+<li><p><strong>Ordinal Frequency Responses</strong> (e.g., <em>Sadness</em>, <em>Euphoric</em>, <em>Exhausted</em>):</p>
+<ul>
+<li><em>Seldom</em> → 1</li>
+<li><em>Sometimes</em> → 2</li>
+<li><em>Usually</em> → 3</li>
+<li><em>Most-Often</em> → 4</li>
+</ul></li>
+<li><p><strong>Binary Responses</strong> (e.g., <em>Suicidal Thoughts</em>, <em>Mood Swing</em>):</p>
+<ul>
+<li><em>Yes</em> → 1</li>
+<li><em>No</em> → 0</li>
+</ul></li>
+<li><p><strong>Scaled Ratings (1–10)</strong> (e.g., <em>Sexual Activity</em>, <em>Optimism</em>): These were grouped into three categorical levels to simplify analysis:</p>
+<ul>
+<li>Ratings <strong>1–3</strong> → <em>Category 1</em></li>
+<li>Ratings <strong>4–6</strong> → <em>Category 2</em></li>
+<li>Ratings <strong>7–9</strong> → <em>Category 3</em></li>
+</ul></li>
 </ul>
+<p>These transformations standardized the dataset, allowing for easier correlation analysis, visualizations, and model input compatibility.</p>
 </section>
-<section id="conclusion-study-purpose" class="slide level2">
+<section id="modeling-and-results-1" class="slide level2 smaller">
+<h2>Modeling and Results</h2>
+<h4 id="hyperparameter-optimization">Hyperparameter Optimization</h4>
+</section>
+<section id="modeling-and-results-2" class="slide level2 smaller">
+<h2>Modeling and Results</h2>
+<h4 id="model-evaluation-performance">Model Evaluation &amp; Performance</h4>
+</section>
+<section id="modeling-and-results-3" class="slide level2 smaller">
+<h2>Modeling and Results</h2>
+<h4 id="feature-importance-interepretability">Feature Importance &amp; Interepretability</h4>
+</section>
+<section id="modeling-and-results-4" class="slide level2 smaller">
+<h2>Modeling and Results</h2>
+<h4 id="sensitvity-robustness-analysis">Sensitvity &amp; Robustness Analysis</h4>
+</section>
+<section id="modeling-and-results-5" class="slide level2 smaller">
+<h2>Modeling and Results</h2>
+<h4 id="summary-of-modeling-results">Summary of Modeling Results</h4>
+</section>
+<section id="conclusion-study-purpose" class="slide level2 smaller">
 <h2>Conclusion: Study Purpose</h2>
 <ul>
 <li>Evaluate effectiveness of XGBoost for predicting mental health outcomes.</li>
@@ -1262,7 +1348,7 @@ Aabiya Mansoor, Abigail Penza Jackson, Corina Rich, Madelyn Champion (Advisor: D
 <li>Model showed strong accuracy and generalizability.</li>
 </ul>
 </section>
-<section id="conclusion-key-findings" class="slide level2">
+<section id="conclusion-key-findings" class="slide level2 smaller">
 <h2>Conclusion: Key Findings</h2>
 <ul>
 <li>Top predictors: stress indicators, behavioral patterns, wellness factors.</li>
@@ -1271,7 +1357,7 @@ Aabiya Mansoor, Abigail Penza Jackson, Corina Rich, Madelyn Champion (Advisor: D
 <li>Stable performance across tuning configurations with minimal overfitting.</li>
 </ul>
 </section>
-<section id="conclusion-implications" class="slide level2">
+<section id="conclusion-implications" class="slide level2 smaller">
 <h2>Conclusion: Implications</h2>
 <ul>
 <li>XGBoost shows potential for early warning mental‑health monitoring.</li>
@@ -1279,7 +1365,7 @@ Aabiya Mansoor, Abigail Penza Jackson, Corina Rich, Madelyn Champion (Advisor: D
 <li>Self‑reported data may introduce bias—interpret with care.</li>
 </ul>
 </section>
-<section id="conclusion-future-work" class="slide level2">
+<section id="conclusion-future-work" class="slide level2 smaller">
 <h2>Conclusion: Future Work</h2>
 <ul>
 <li>Use larger and more diverse datasets.</li>
@@ -1289,7 +1375,7 @@ Aabiya Mansoor, Abigail Penza Jackson, Corina Rich, Madelyn Champion (Advisor: D
 <li>Address fairness and ethical use of health data.</li>
 </ul>
 </section>
-<section id="conclusion-overview" class="slide level2">
+<section id="conclusion-overview" class="slide level2 smaller">
 <h2>Conclusion: Overview</h2>
 <ul>
 <li>XGBoost is effective for survey‑based mental‑health prediction.</li>
@@ -2428,44 +2514,6 @@ window.QuartoSupport = function () {
         ]
       });
     </script>
-    
-    <script>
-      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
-      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
-      // slide changes (different for each slide format).
-      (function () {
-        // dispatch for htmlwidgets
-        function fireSlideEnter() {
-          const event = window.document.createEvent("Event");
-          event.initEvent("slideenter", true, true);
-          window.document.dispatchEvent(event);
-        }
-
-        function fireSlideChanged(previousSlide, currentSlide) {
-          fireSlideEnter();
-
-          // dispatch for shiny
-          if (window.jQuery) {
-            if (previousSlide) {
-              window.jQuery(previousSlide).trigger("hidden");
-            }
-            if (currentSlide) {
-              window.jQuery(currentSlide).trigger("shown");
-            }
-          }
-        }
-
-        // hookup for slidy
-        if (window.w3c_slidy) {
-          window.w3c_slidy.add_observer(function (slide_num) {
-            // slide_num starts at position 1
-            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
-          });
-        }
-
-      })();
-    </script>
-
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
       const toggleBodyColorMode = (bsSheetEl) => {

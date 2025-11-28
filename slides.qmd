@@ -19,7 +19,7 @@ editor:
 ---
 ## Introduction  {.smaller}
 
-eXtreme Gradient Boosting (XGB) algorithm
+#### eXtreme Gradient Boosting (XGB) algorithm
 - A supervised machine learning algorithm
 - Modification of Gradient Boosting Framework
 - Ensemble of weak decision trees
@@ -27,58 +27,61 @@ eXtreme Gradient Boosting (XGB) algorithm
 - High performance, speed, scalability
 - Applications in healthcare, education, public health, finance, and engineering.
 
-## Introduction into Project
+## Introduction {.smaller}
 
-XGBoost for mental disorder classification
+#### XGBoost for mental disorder classification
 - Using XGBoost on clinical and survey data
 - Classification of individuals into one of four categories: Bipolar I Disorder, Bipolar II Disorder, Major Depressive Disorder, and Normal
 - XGBoosts proves to be a suitable algorithm for the problem
 
-## Literature Review in Healthcare
+## Literature Review {.smaller}
 
-eXtreme Gradient Boosting (XGBoost) in healthcare
+#### eXtreme Gradient Boosting (XGBoost) in healthcare
 - XGBoost strengths in real world problems handling class imbalance, heterogeneous data types, or non-linear relationships. [@chen2016xgboost]
 - XGBoost combined with DL for breast cancer classification with high reliability. [@liew2021breast]
 - XGBoost with biomarker data to improve depression diagnoses in a large Dutch population dataset.[@sharma2020depression]
 - XGBoost to multi-modal datasets to predict self-harm in young adults.[@xu2024selfharm]
 - A hybrid algorithm (XGBoost-HOA) to classify depression, anxiety, and stress
-- Dual XGBoost models applied to distinguish between deficit and non-deficit schizophrenia subtypes using   fMRI features.[@zhang2022imbalanced]
+- Dual XGBoost models applied to distinguish between deficit and non-deficit schizophrenia subtypes using fMRI features.[@zhang2022imbalanced]
 - XGBoost compared with linear regression in predicting depression among refugee children.[@saleh2024child] 
 
 
-## Literature Review of Limitations
+## Literature Review {.smaller}
 
-XGBoost limitations for imbalance data
+#### XGBoost limitations for imbalance data
 - handled by optimization techniques [@zhang2022imbalanced]
 - Handled by balancing the class distribution [@sharma2020depression]
 - Preprocessing and hyperparameter tuning importance in imbalance data for accurate XGBoost algorithm.
 
-## Literature Review in Education & Public Health
+## Literature Review {.smaller}
 
-XGBoost in Education
+#### XGBoost in Education
 - XGBoost in academic prediction models [@hu2019academic]
 - XGBoost out performing traditional logistic regression models in predicting learner performance [@hakkal2024education].
-XGBoost in Public health
+
+#### XGBoost in Public health
 - XGBoost used to predict daily COVID-19 cases in the United States.[@fang2022covid]
 - A hybrid model integrating XGBoost, Random Forest, and Antlion Optimization used to predict infectious disease outbreaks.[@sivakumar2023prediction]
 
-## Literature Review in Finance & Pharmaceuticals
+## Literature Review {.smaller}
 
-XGBoost in financial sector
+#### XGBoost in financial sector
 - XGBoost model’s ability to rank feature importance and prevent overfitting using regularization made it a top performer in credit risk prediction tasks[@li2020xgboost]
 - XGBoost to forecast volatility in the U.S. stock market, identifying the Economic Policy Uncertainty Index as a critical predictor.[@fomunyam2023impact]
 
-XGBoost In pharmaceutical research
+#### XGBoost In pharmaceutical research
 - Application of XGBoost in drug development.[@wiens2025drugdev]
 
-## Literature Review in Eudcation Diagnostics & Sports Analytics
+## Literature Review {.smaller}
 
-XGBoost in educational diagnostics and sports analytics.
+#### XGBoost in educational diagnostics
 - XGBoost enhanced learner performance prediction and knowledge tracing on platforms like ASSIST09 and Algebra08. [@su2023knowledge] and [@hakkal2024education]
+
+#### XGBoost in Sports Analytics
 - XGBoost used to predict ultramarathon running speeds based on demographics and environmental factors.[@nikolaidis2023ultramarathon]
 
 
-## Methods: Extreme Gradient Boosting (XGBoost)
+## Methods: Extreme Gradient Boosting (XGBoost) {.smaller}
 
 - Ensemble of weak decision trees
 - Trained sequentially, each tree corrects previous errors
@@ -86,7 +89,7 @@ XGBoost in educational diagnostics and sports analytics.
 - Uses gradient descent to minimize loss
 - Includes regularization to prevent overfitting
 
-## Methods: XGBoost Formulas
+## Methods: XGBoost Formulas {.smaller}
 
 - Loss term: Measures prediction error
 - Regularization term: Penalizes model complexity
@@ -96,7 +99,7 @@ $$
 \text{Obj} = \sum_{i=1}^{n} L(y_i, \hat{y}_i) + \sum_{k=1}^{K} \Omega(f_k)
 $$
 
-## Data Exploration and Visualization
+## Data Exploration and Visualization {.smaller}
 
 - Sourced from Kaggle (2023 clinical records)
 - 120 individuals assessed for mental disorders
@@ -114,41 +117,73 @@ $$
 - Identified potential imbalance or outliers
 - Explored correlations between features
 
-## Modeling and Results
+## Modeling and Results {.smaller}
 
--   Explain your data preprocessing and cleaning steps.
+#### Data Preprocessing
+To facilitate analysis, all categorical variables in the dataset were transformed into numerical or grouped categorical formats in Excel. The transformations were applied as follows:
 
--   Present your key findings in a clear and concise manner.
+* **Ordinal Frequency Responses** (e.g., *Sadness*, *Euphoric*, *Exhausted*):
 
--   Use visuals to support your claims.
+  * *Seldom* → 1
+  * *Sometimes* → 2
+  * *Usually* → 3
+  * *Most-Often* → 4
 
--   **Tell a story about what the data reveals.**
+* **Binary Responses** (e.g., *Suicidal Thoughts*, *Mood Swing*):
 
-```{r}
+  * *Yes* → 1
+  * *No* → 0
 
-```
+* **Scaled Ratings (1–10)** (e.g., *Sexual Activity*, *Optimism*):
+  These were grouped into three categorical levels to simplify analysis:
 
-## Conclusion: Study Purpose
+  * Ratings **1–3** → *Category 1*
+  * Ratings **4–6** → *Category 2*
+  * Ratings **7–9** → *Category 3*
+
+These transformations standardized the dataset, allowing for easier correlation analysis, visualizations, and model input compatibility.
+
+## Modeling and Results {.smaller}
+
+#### Hyperparameter Optimization
+
+## Modeling and Results {.smaller}
+
+#### Model Evaluation & Performance
+
+## Modeling and Results {.smaller}
+
+#### Feature Importance & Interepretability
+
+## Modeling and Results {.smaller}
+
+#### Sensitvity & Robustness Analysis
+
+## Modeling and Results {.smaller}
+
+#### Summary of Modeling Results
+
+## Conclusion: Study Purpose {.smaller}
 
 - Evaluate effectiveness of XGBoost for predicting mental health outcomes.
 - Develop, tune, and validate the model.
 - Identify highest‑predictive features and assess ability to capture non‑linear relationships.
 - Model showed strong accuracy and generalizability.
 
-## Conclusion: Key Findings
+## Conclusion: Key Findings {.smaller}
 
 - Top predictors: stress indicators, behavioral patterns, wellness factors.
 - High feature importance suggests relevance to mental‑health risk.
 - Model effectively distinguished between classes.
 - Stable performance across tuning configurations with minimal overfitting.
 
-## Conclusion: Implications
+## Conclusion: Implications {.smaller}
 
 - XGBoost shows potential for early warning mental‑health monitoring.
 - Useful for identifying at‑risk individuals based on survey data.
 - Self‑reported data may introduce bias—interpret with care.
 
-## Conclusion: Future Work
+## Conclusion: Future Work {.smaller}
 
 - Use larger and more diverse datasets.
 - Incorporate behavioral or time‑based variables.
@@ -156,7 +191,7 @@ $$
 - Test in real‑world settings.
 - Address fairness and ethical use of health data.
 
-## Conclusion: Overview
+## Conclusion: Overview {.smaller}
 
 - XGBoost is effective for survey‑based mental‑health prediction.
 - Provides fast and interpretable insights alongside traditional assessments.
