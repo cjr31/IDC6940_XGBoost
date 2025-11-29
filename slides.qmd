@@ -5,6 +5,8 @@ author: "Aabiya Mansoor, Abigail Penza Jackson, Corina Rich, Madelyn Champion (A
 date: '`r Sys.Date()`'
 format:
   revealjs:
+    smaller: true
+    scrollable: true
     theme: moon
 course: Capstone Projects in Data Science
 bibliography: references.bib # file contains bibtex for references
@@ -236,13 +238,47 @@ Taken together, the metrics indicate that the model has **strong underlying disc
 
 #### Feature Importance & Interepretability
 
+- A SHAP values analysis was performed to highlight how predictors influence classification across four classes, revealing both broadly influential and class-specific features.
+
+- Most Influential Features (Across Classes)
+  - **Mood Swing** – Strongest overall predictor, especially for Bipolar Type-1 and Type-2.  
+  - **Suicidal thoughts** – Highly impactful for Depression and Bipolar Type-2.  
+  - **Sadness** – Major differentiator for Bipolar Type-1.
+- Class-Specific Influences
+  - **Concentration Category 2** – Strong for Normal
+  - **Authority & Respect** – Most impactful for Bipolar Type-2.  
+  - **Ignore & Move On** & **Exhausted** – Distinguish the Normal class
+- Overall Conclusion
+  - Distinct SHAP patterns across classes indicate unique psychological signatures, consistent with a well-calibrated multiclass XGBoost model.
+
+
 ## Modeling and Results {.smaller}
 
 #### Sensitvity & Robustness Analysis
+- The sensitivity analysis results indicate that the model performs consistently and reliably across repeated resampling or perturbation scenarios. The metrics summarize how stable the model's performance remains when exposed to variability in the input data.
+  - Mean Accuracy: 0.804 reflects strong overall predictive performance across iterations.
+  - SD of Accuracy: 0.0821 suggests moderate variability, meaning that although the model generally performs well, accuracy fluctuates somewhat depending on sample composition.
+  - Mean ROC AUC: 0.957  demonstrates excellent discriminative ability, indicating that the model consistently separates classes with high precision.  
+  - SD of ROC AUC: 0.0397 shows that this discriminative performance remains highly stable, even when the data varies.
+These results show that:
+  - The model has strong overall performance, especially in terms of ROC AUC.  
+  - Variability across repeats is low to moderate, supporting the model’s robustness.  
+  - The model’s ability to rank or distinguish classes (ROC AUC) is especially stable, while accuracy shows slightly more sensitivity to data shifts.
 
 ## Modeling and Results {.smaller}
 
 #### Summary of Modeling Results
+
+- On the independent 24-case test set, the model showed strong agreement with expert diagnoses
+- The model successfully identified the majority of cases in each diagnostic category, demonstrating strong generalization to unseen data.
+
+The final XGBoost model delivered:
+  - High discriminative performance, with ROC AUC > 0.90 across cross-validation and sensitivity analyses  
+  - Stable, robust generalization, supported by low performance variability  
+  - Interpretable, clinically relevant insights, enabled by SHAP and feature importance  
+  - Accurate classification, with strong performance across all four diagnostic groups on unseen data  
+
+Overall, XGBoost proved to be an effective and interpretable modeling approach for mental health classification in a small structured dataset, delivering both predictive value and meaningful interpretability essential for clinical research.
 
 ## Conclusion: Study Purpose {.smaller}
 
