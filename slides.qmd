@@ -117,6 +117,7 @@ library(gt)
 - Uses gradient descent to minimize loss
 - Includes regularization to prevent overfitting
 
+
 ## Methods: XGBoost Formulas {.smaller}
 
 - Loss term: Measures prediction error
@@ -127,15 +128,23 @@ $$
 \text{Obj} = \sum_{i=1}^{n} L(y_i, \hat{y}_i) + \sum_{k=1}^{K} \Omega(f_k)
 $$
 
+## Methods: Training the Workflow {.smaller}
+
+- Stage 1: Initial Prediction
+- Stage 2: Iterative Boosting (Tree k)
+- Stage 3: Final Ensemble Prediction
+
+![XG Boost](XG Boost.png)
+
 ## Data Exploration and Visualization {.smaller}
 
 - Sourced from Kaggle (2023 clinical records)
 - 120 individuals assessed for mental disorders
 -Labels:
-   -Normal
-   -Bipolar Type I
-   -Bipolar Type II
-   -Depression
+   - Normal (25% of total)
+   - Bipolar Type I (23% of total)
+   - Bipolar Type II (26% of total)
+   - Depression (26% of total)
 - 17 diagnostic variables
 - Mix of clinical, behavioral, demographic factors
 
@@ -144,6 +153,8 @@ $$
 - Examined class distribution
 - Identified potential imbalance or outliers
 - Explored correlations between features
+
+![Cramers V](Cramers V.png)
 
 ## Modeling and Results {.smaller}
 
@@ -166,13 +177,13 @@ To facilitate analysis, all categorical variables in the dataset were transforme
   - The predictive target for all models was the expert clinical diagnosis
   
 - An XGBoost model specification was created using the tidymodels framework where all major hyperparameters were set to be tuned including:
-      - the number of trees
-      - tree depth 
-      - learning rate 
-      - loss reduction, 
-      - minimum node size
-      - subsampling rate
-      - number of predictors considered at each split 
+  - the number of trees
+  - tree depth 
+  - learning rate 
+  - loss reduction, 
+  - minimum node size
+  - subsampling rate
+  - number of predictors considered at each split 
       
 ## Modeling and Results {.smaller}
 
@@ -190,10 +201,10 @@ To facilitate analysis, all categorical variables in the dataset were transforme
 ## Modeling and Results {.smaller}
 
 #### Hyperparameter Optimization
-- The final hyperparameter grid consists of 30 candidate hyperparameter combination which was constructed using a space-filling design. 
-  - Model performance was assessed using accuracy and the area under the ROC curve (ROC AUC).
-  - Visualizing the tuning results revealed the ROC AUC versus number of trees plot indicated that the optimal tree depth was approximately 2, suggesting that relatively shallow trees generalized best for this dataset. 
-  - Model performance increased steadily with the number of boosting iterations, with the highest ROC AUC occurring at around 625 trees. At this configuration, the model achieved an accuracy exceeding 0.80 and a ROC AUC greater than 0.90, indicating strong discriminatory performance.
+- A 30-point hyperparameter grid was generated using a space-filling design.
+- Model performance was evaluated using Accuracy and ROC AUC.
+- Performance improved with more boosting iterations and depth = 2, peaking at ~625 trees with Accuracy > 0.80 and ROC AUC > 0.90.
+
 
 ![VisulizationTuningResults](VisulizationTuningResults.png)
 
@@ -224,61 +235,55 @@ The model's predictions on the held-out test set showed strong agreement with th
 
 #### Model Evaluation & Performance
 
-The XGBoost multiclass classification model demonstrates **moderate overall predictive performance**, with room for improvement but also several encouraging indicators of discriminative ability.
-- **Accuracy:** 0.654  
-  An accuracy of **65.4%** suggests that the model correctly classifies roughly two-thirds of the observations.
-- **Kappa:** 0.534  
-  The Kappa value of **0.534** reflects **moderate agreement** between the model’s predictions and the true class labels after accounting for chance. 
-- **ROC AUC (macro-weighted):** 0.927  
-  The macro-weighted ROC AUC of **0.927** suggests that the model does a strong job of ranking observations correctly across all classes, even if it occasionally makes incorrect final class assignments. 
-
-Taken together, the metrics indicate that the model has **strong underlying discriminative power (high AUC)** but **moderate final classification performance (accuracy and kappa)**.
+- XGBoost shows **moderate overall predictive performance** with strong discriminative ability.
+- **Accuracy:** 0.654 — correctly classifies ~65% of observations.
+- **Kappa:** 0.534 — indicates **moderate agreement** beyond chance.
+- **Macro ROC AUC:** 0.927 — strong ability to rank observations across all classes.
+- Overall: **High AUC but moderate accuracy/kappa**, suggesting strong discrimination but room to improve final classification. 
 
 ## Modeling and Results {.smaller}
 
 #### Feature Importance & Interepretability
 
-- A SHAP values analysis was performed to highlight how predictors influence classification across four classes, revealing both broadly influential and class-specific features.
+- SHAP analysis shows both broadly influential and class-specific predictors across the four classes.
 
-- Most Influential Features (Across Classes)
-  - **Mood Swing** – Strongest overall predictor, especially for Bipolar Type-1 and Type-2.  
-  - **Suicidal thoughts** – Highly impactful for Depression and Bipolar Type-2.  
-  - **Sadness** – Major differentiator for Bipolar Type-1.
-- Class-Specific Influences
-  - **Concentration Category 2** – Strong for Normal
-  - **Authority & Respect** – Most impactful for Bipolar Type-2.  
-  - **Ignore & Move On** & **Exhausted** – Distinguish the Normal class
-- Overall Conclusion
-  - Distinct SHAP patterns across classes indicate unique psychological signatures, consistent with a well-calibrated multiclass XGBoost model.
+- **Most Influential (Across Classes):**
+  - **Mood Swing:** strongest overall, especially for Bipolar I & II  
+  - **Suicidal Thoughts:** key for Depression and Bipolar II  
+  - **Sadness:** major driver for Bipolar I
 
+- **Class-Specific Influences:**
+  - **Concentration (Cat 2):** strong indicator for Normal  
+  - **Authority & Respect:** most impactful for Bipolar II  
+  - **Ignore & Move On** and **Exhausted:** help distinguish the Normal class
+
+- **Conclusion:** Distinct SHAP patterns reveal unique psychological signatures across classes, reflecting a well-calibrated multiclass XGBoost model.
 
 ## Modeling and Results {.smaller}
 
 #### Sensitvity & Robustness Analysis
-- The sensitivity analysis results indicate that the model performs consistently and reliably across repeated resampling or perturbation scenarios. The metrics summarize how stable the model's performance remains when exposed to variability in the input data.
-  - Mean Accuracy: 0.804 reflects strong overall predictive performance across iterations.
-  - SD of Accuracy: 0.0821 suggests moderate variability, meaning that although the model generally performs well, accuracy fluctuates somewhat depending on sample composition.
-  - Mean ROC AUC: 0.957  demonstrates excellent discriminative ability, indicating that the model consistently separates classes with high precision.  
-  - SD of ROC AUC: 0.0397 shows that this discriminative performance remains highly stable, even when the data varies.
-These results show that:
-  - The model has strong overall performance, especially in terms of ROC AUC.  
-  - Variability across repeats is low to moderate, supporting the model’s robustness.  
-  - The model’s ability to rank or distinguish classes (ROC AUC) is especially stable, while accuracy shows slightly more sensitivity to data shifts.
+
+- Sensitivity analysis shows the model is **stable and consistent** across resampling.
+  - **Mean Accuracy:** 0.804 — strong predictive performance.  
+  - **SD Accuracy:** 0.0821 — moderate variability across samples.  
+  - **Mean ROC AUC:** 0.957 — excellent and consistent discriminative ability.  
+  - **SD ROC AUC:** 0.0397 — highly stable class separation.
+- Overall: **High, stable AUC** and **low–moderate variability**, indicating robust performance with slight accuracy sensitivity to data shifts.
 
 ## Modeling and Results {.smaller}
 
 #### Summary of Modeling Results
 
-- On the independent 24-case test set, the model showed strong agreement with expert diagnoses
-- The model successfully identified the majority of cases in each diagnostic category, demonstrating strong generalization to unseen data.
+- On the 24-case test set, the model showed **strong agreement with expert diagnoses** and good generalization.
+- It correctly identified most cases in each diagnostic category.
 
-The final XGBoost model delivered:
-  - High discriminative performance, with ROC AUC > 0.90 across cross-validation and sensitivity analyses  
-  - Stable, robust generalization, supported by low performance variability  
-  - Interpretable, clinically relevant insights, enabled by SHAP and feature importance  
-  - Accurate classification, with strong performance across all four diagnostic groups on unseen data  
+- **Final model strengths:**
+  - **High discriminative power:** ROC AUC > 0.90 across CV and sensitivity analyses  
+  - **Stable generalization:** low variability across repeats  
+  - **Interpretability:** clear clinical insights via SHAP and feature importance  
+  - **Accurate predictions:** strong performance across all four diagnostic groups
 
-Overall, XGBoost proved to be an effective and interpretable modeling approach for mental health classification in a small structured dataset, delivering both predictive value and meaningful interpretability essential for clinical research.
+- **Conclusion:** XGBoost is an effective, interpretable model for mental health classification in a small structured dataset, offering strong predictive value and clinically meaningful insights.
 
 ## Conclusion {.smaller}
 
