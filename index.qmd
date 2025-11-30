@@ -105,7 +105,7 @@ Gradient descent is used to minimize this objective function by updating model p
 Hyperparameters such as the learning rate, maximum tree depth, regularization strength, and subsampling ratio are typically tuned via cross-validation to maximize model performance. Due to its efficiency and predictive power, XGBoost is widely used in structured data problems [@zhang2022imbalanced].
 
 ![XG Boost](XG Boost.png)
-**Figure 1** shows the sequential 3-stage process of XGBoost:
+**Figure 1** [@zhang2022imbalanced] shows the sequential 3-stage process of XGBoost:
 
 Stage 1: Initial Prediction
 The process begins by making a simple first guess, or "base prediction" . This initial model is usually very simple (like the average of all the data). The graph shows this simple model as a flat line that doesn't fit the data points well. The model then calculates the errors, or residuals, which are the differences between this first guess and the actual data points.
