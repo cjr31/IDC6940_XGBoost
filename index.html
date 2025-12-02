@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aabiya Mansoor, Abigail Penza Jackson, Corina Rich, Madelyn Champion (Advisor: Dr. Cohen)">
-<meta name="dcterms.date" content="2025-11-30">
+<meta name="dcterms.date" content="2025-12-01">
 
 <title>Using XGBoost in Mental Disorder Classification</title>
 <style>
@@ -3506,7 +3506,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 30, 2025</p>
+      <p class="date">December 1, 2025</p>
     </div>
   </div>
   
@@ -4718,39 +4718,58 @@ height: 0px !important;
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter correct probability columns</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>true_levels <span class="ot">&lt;-</span> <span class="fu">levels</span>(train_data<span class="sc">$</span>Expert.Diagnose)</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>prob_cols <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;.pred_&quot;</span>, true_levels)</span>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>base_tbl <span class="ot">&lt;-</span> <span class="fu">metrics</span>(test_results,</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">truth =</span> Expert.Diagnose,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">estimate =</span> .pred_class)</span>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute model performance metrics</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="fu">metrics</span>(test_results, <span class="at">truth =</span> Expert.Diagnose, <span class="at">estimate =</span> .pred_class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>roc_tbl <span class="ot">&lt;-</span> <span class="fu">roc_auc</span>(test_results,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">truth =</span> Expert.Diagnose,</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">all_of</span>(prob_cols),</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">estimator =</span> <span class="st">&quot;macro_weighted&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">.metric =</span> <span class="st">&quot;roc_auc_macro_weighted&quot;</span>)</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge Table</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">bind_rows</span>(base_tbl, roc_tbl),</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">format =</span> <span class="st">&quot;markdown&quot;</span>,</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">caption =</span> <span class="st">&quot;Classification Metrics Including Macro-Weighted ROC AUC&quot;</span>,</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">digits =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 3
-  .metric  .estimator .estimate
-  &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
-1 accuracy multiclass     0.654
-2 kap      multiclass     0.534</code></pre>
-</div>
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">roc_auc</span>(test_results, <span class="at">truth =</span> Expert.Diagnose,</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>        <span class="fu">all_of</span>(prob_cols),</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">estimator =</span> <span class="st">&quot;macro_weighted&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 3
-  .metric .estimator     .estimate
-  &lt;chr&gt;   &lt;chr&gt;              &lt;dbl&gt;
-1 roc_auc macro_weighted     0.927</code></pre>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Classification Metrics Including Macro-Weighted ROC AUC</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">.metric</th>
+<th style="text-align: left;">.estimator</th>
+<th style="text-align: right;">.estimate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">accuracy</td>
+<td style="text-align: left;">multiclass</td>
+<td style="text-align: right;">0.654</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">kap</td>
+<td style="text-align: left;">multiclass</td>
+<td style="text-align: right;">0.534</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">roc_auc_macro_weighted</td>
+<td style="text-align: left;">macro_weighted</td>
+<td style="text-align: right;">0.927</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ROC Curve (macro average)</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">roc_curve</span>(test_results, <span class="at">truth =</span> Expert.Diagnose, <span class="fu">all_of</span>(prob_cols)) <span class="sc">%&gt;%</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ROC Curve (macro average)</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">roc_curve</span>(test_results, <span class="at">truth =</span> Expert.Diagnose, <span class="fu">all_of</span>(prob_cols)) <span class="sc">%&gt;%</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -4786,43 +4805,43 @@ The macro-weighted ROC AUC of <strong>0.927</strong> is notably high. This sugge
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract fitted workflow and XGBoost model</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>wf_fit <span class="ot">&lt;-</span> final_fit</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>xgb_fit <span class="ot">&lt;-</span> wf_fit <span class="sc">%&gt;%</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="fu">extract_fit_engine</span>()</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract recipe and bake training data into numeric matrix</span></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>rec <span class="ot">&lt;-</span> wf_fit <span class="sc">%&gt;%</span> <span class="fu">extract_recipe</span>()</span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>train_baked <span class="ot">&lt;-</span> <span class="fu">bake</span>(rec, <span class="at">new_data =</span> train_data)</span>
-<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Separate predictors and target</span></span>
-<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>X_train <span class="ot">&lt;-</span> train_baked <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>Expert.Diagnose)</span>
-<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>X_train_matrix <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(X_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract fitted workflow and XGBoost model</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>wf_fit <span class="ot">&lt;-</span> final_fit</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>xgb_fit <span class="ot">&lt;-</span> wf_fit <span class="sc">%&gt;%</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="fu">extract_fit_engine</span>()</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract recipe and bake training data into numeric matrix</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>rec <span class="ot">&lt;-</span> wf_fit <span class="sc">%&gt;%</span> <span class="fu">extract_recipe</span>()</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>train_baked <span class="ot">&lt;-</span> <span class="fu">bake</span>(rec, <span class="at">new_data =</span> train_data)</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Separate predictors and target</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>X_train <span class="ot">&lt;-</span> train_baked <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>Expert.Diagnose)</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>X_train_matrix <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(X_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute SHAP values</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>sv <span class="ot">&lt;-</span> <span class="fu">shapviz</span>(</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>xgb_fit,</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>X_train_matrix,</span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="at">X =</span> X_train</span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute SHAP values</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>sv <span class="ot">&lt;-</span> <span class="fu">shapviz</span>(</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>xgb_fit,</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>X_train_matrix,</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="at">X =</span> X_train</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Global feature importance</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>sv_importance <span class="ot">&lt;-</span> <span class="fu">sv_importance</span>(sv)</span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>sv_importance</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Global feature importance</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>sv_importance <span class="ot">&lt;-</span> <span class="fu">sv_importance</span>(sv)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>sv_importance</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -4871,11 +4890,11 @@ More influential for <strong>Normal</strong> than others, highlighting fatigue-r
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pick an observation</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>i <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sv_waterfall</span>(sv, <span class="at">row_index =</span> i)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pick an observation</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>i <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sv_waterfall</span>(sv, <span class="at">row_index =</span> i)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -4961,61 +4980,81 @@ More influential for <strong>Normal</strong> than others, highlighting fatigue-r
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Repeated stratified k-fold CV</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>repeated_folds <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(</span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  train_data,</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">v =</span> <span class="dv">5</span>,</span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">repeats =</span> <span class="dv">5</span>,</span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">strata =</span> Expert.Diagnose</span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Repeated stratified k-fold CV</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>repeated_folds <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  train_data,</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">v =</span> <span class="dv">5</span>,</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">repeats =</span> <span class="dv">5</span>,</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">strata =</span> Expert.Diagnose</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">#K Fold Cross Validation for Robustness</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>cv_results <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(repeated_folds<span class="sc">$</span>splits, <span class="cf">function</span>(split) {</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Fit workflow</span></span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  fit_wf <span class="ot">&lt;-</span> <span class="fu">fit</span>(final_xgb, <span class="at">data =</span> <span class="fu">analysis</span>(split))</span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Predict class</span></span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>  pred_class <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit_wf, <span class="at">new_data =</span> <span class="fu">assessment</span>(split)) <span class="sc">%&gt;%</span></span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">.pred_class =</span> .pred_class)</span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Predict probabilities</span></span>
-<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>  pred_prob <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit_wf, <span class="at">new_data =</span> <span class="fu">assessment</span>(split), <span class="at">type =</span> <span class="st">&quot;prob&quot;</span>)</span>
-<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Truth</span></span>
-<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>  truth <span class="ot">&lt;-</span> <span class="fu">assessment</span>(split) <span class="sc">%&gt;%</span> <span class="fu">select</span>(Expert.Diagnose)</span>
-<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Combine predictions</span></span>
-<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>  preds <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(pred_class, pred_prob, truth)</span>
-<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Only probability columns (exclude .pred_class)</span></span>
-<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>  prob_cols <span class="ot">&lt;-</span> <span class="fu">colnames</span>(preds)[<span class="fu">grepl</span>(<span class="st">&quot;^</span><span class="sc">\\</span><span class="st">.pred_&quot;</span>, <span class="fu">colnames</span>(preds)) <span class="sc">&amp;</span> <span class="fu">colnames</span>(preds) <span class="sc">!=</span> <span class="st">&quot;.pred_class&quot;</span>]</span>
-<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
-<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">accuracy =</span> <span class="fu">accuracy</span>(preds, <span class="at">truth =</span> Expert.Diagnose, <span class="at">estimate =</span> .pred_class)<span class="sc">$</span>.estimate,</span>
-<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">roc_auc  =</span> <span class="fu">roc_auc</span>(preds, <span class="at">truth =</span> Expert.Diagnose, <span class="sc">!!!</span><span class="fu">syms</span>(prob_cols), <span class="at">estimator =</span> <span class="st">&quot;macro_weighted&quot;</span>)<span class="sc">$</span>.estimate</span>
-<span id="cb35-27"><a href="#cb35-27" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb35-28"><a href="#cb35-28" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb35-29"><a href="#cb35-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-30"><a href="#cb35-30" aria-hidden="true" tabindex="-1"></a>cv_results <span class="sc">%&gt;%</span></span>
-<span id="cb35-31"><a href="#cb35-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb35-32"><a href="#cb35-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_accuracy =</span> <span class="fu">mean</span>(accuracy),</span>
-<span id="cb35-33"><a href="#cb35-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_accuracy   =</span> <span class="fu">sd</span>(accuracy),</span>
-<span id="cb35-34"><a href="#cb35-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_roc      =</span> <span class="fu">mean</span>(roc_auc),</span>
-<span id="cb35-35"><a href="#cb35-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_roc        =</span> <span class="fu">sd</span>(roc_auc)</span>
-<span id="cb35-36"><a href="#cb35-36" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">#K Fold Cross Validation for Robustness</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>cv_results <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(repeated_folds<span class="sc">$</span>splits, <span class="cf">function</span>(split) {</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Fit workflow</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  fit_wf <span class="ot">&lt;-</span> <span class="fu">fit</span>(final_xgb, <span class="at">data =</span> <span class="fu">analysis</span>(split))</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Predict class</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  pred_class <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit_wf, <span class="at">new_data =</span> <span class="fu">assessment</span>(split)) <span class="sc">%&gt;%</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">.pred_class =</span> .pred_class)</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Predict probabilities</span></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>  pred_prob <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit_wf, <span class="at">new_data =</span> <span class="fu">assessment</span>(split), <span class="at">type =</span> <span class="st">&quot;prob&quot;</span>)</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Truth</span></span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>  truth <span class="ot">&lt;-</span> <span class="fu">assessment</span>(split) <span class="sc">%&gt;%</span> <span class="fu">select</span>(Expert.Diagnose)</span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Combine predictions</span></span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>  preds <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(pred_class, pred_prob, truth)</span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Only probability columns (exclude .pred_class)</span></span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>  prob_cols <span class="ot">&lt;-</span> <span class="fu">colnames</span>(preds)[<span class="fu">grepl</span>(<span class="st">&quot;^</span><span class="sc">\\</span><span class="st">.pred_&quot;</span>, <span class="fu">colnames</span>(preds)) <span class="sc">&amp;</span> <span class="fu">colnames</span>(preds) <span class="sc">!=</span> <span class="st">&quot;.pred_class&quot;</span>]</span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
+<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">accuracy =</span> <span class="fu">accuracy</span>(preds, <span class="at">truth =</span> Expert.Diagnose, <span class="at">estimate =</span> .pred_class)<span class="sc">$</span>.estimate,</span>
+<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">roc_auc  =</span> <span class="fu">roc_auc</span>(preds, <span class="at">truth =</span> Expert.Diagnose, <span class="sc">!!!</span><span class="fu">syms</span>(prob_cols), <span class="at">estimator =</span> <span class="st">&quot;macro_weighted&quot;</span>)<span class="sc">$</span>.estimate</span>
+<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb32-28"><a href="#cb32-28" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb32-29"><a href="#cb32-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-30"><a href="#cb32-30" aria-hidden="true" tabindex="-1"></a>cv_results <span class="sc">%&gt;%</span></span>
+<span id="cb32-31"><a href="#cb32-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb32-32"><a href="#cb32-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean_Accuracy =</span> <span class="fu">mean</span>(accuracy),</span>
+<span id="cb32-33"><a href="#cb32-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">SD_Accuracy   =</span> <span class="fu">sd</span>(accuracy),</span>
+<span id="cb32-34"><a href="#cb32-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean_ROC      =</span> <span class="fu">mean</span>(roc_auc),</span>
+<span id="cb32-35"><a href="#cb32-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">SD_ROC        =</span> <span class="fu">sd</span>(roc_auc)</span>
+<span id="cb32-36"><a href="#cb32-36" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb32-37"><a href="#cb32-37" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb32-38"><a href="#cb32-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">format =</span> <span class="st">&quot;markdown&quot;</span>,</span>
+<span id="cb32-39"><a href="#cb32-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&quot;Cross-Validation Performance Summary&quot;</span>,</span>
+<span id="cb32-40"><a href="#cb32-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">digits =</span> <span class="dv">3</span></span>
+<span id="cb32-41"><a href="#cb32-41" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 4
-  mean_accuracy sd_accuracy mean_roc sd_roc
-          &lt;dbl&gt;       &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;
-1         0.804      0.0821    0.957 0.0397</code></pre>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Cross-Validation Performance Summary</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Mean_Accuracy</th>
+<th style="text-align: right;">SD_Accuracy</th>
+<th style="text-align: right;">Mean_ROC</th>
+<th style="text-align: right;">SD_ROC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0.804</td>
+<td style="text-align: right;">0.082</td>
+<td style="text-align: right;">0.957</td>
+<td style="text-align: right;">0.04</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <p>The sensitivity analysis results indicate that the model performs <strong>consistently and reliably</strong> across repeated resampling or perturbation scenarios. The metrics summarize how stable the model’s performance remains when exposed to variability in the input data.</p>
@@ -5123,10 +5162,10 @@ The relatively low standard deviation of <strong>0.0397</strong> shows that this
 <section id="conclusion" class="level3">
 <h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
 <p>The purpose of this study was to evaluate the effectiveness of an XGBoost model in predicting mental-health outcomes using a survey-based dataset. By developing, tuning, and validating the model, we examined its ability to identify influential predictive factors and to capture non-linear relationships within mental-health data. Overall, the results indicate that XGBoost performed robustly, demonstrating consistent accuracy across cross-validation folds and strong generalizability relative to baseline methods.</p>
-<p>The analysis highlighted several key predictors—particularly self-reported stress indicators, behavioral patterns, and wellness-related factors—as the most influential contributors to model performance. These variables emerged as top-ranking features, suggesting their relevance as potential risk indicators for adverse mental-health outcomes. The model effectively distinguished between outcome classes, and the stability of performance across tuning configurations indicates limited susceptibility to overfitting.</p>
+<p>The analysis highlighted several key predictors, particularly self-reported stress indicators, behavioral patterns, and wellness-related factors, as the most influential contributors to model performance. These variables emerged as top-ranking features, suggesting their relevance as potential risk indicators for adverse mental-health outcomes. The model effectively distinguished between outcome classes, and the stability of performance across tuning configurations indicates limited susceptibility to overfitting.</p>
 <p>These findings suggest that machine-learning models such as XGBoost could support early mental-health monitoring efforts, particularly in clinical or screening contexts. A predictive model capable of identifying at-risk individuals through survey responses may augment traditional diagnostic processes. Although self-reported data may introduce bias, the model’s outputs could still serve as a useful complement to clinician judgment when applied with appropriate caution and follow-up procedures.</p>
-<p>This study demonstrates that boosted-tree models provide a strong methodological option for mental-health prediction tasks. XGBoost effectively managed data limitations, captured non-linear relationships, and generated interpretable feature-importance measures that offer insights into key predictors. Nonetheless, several limitations must be acknowledged. The relatively small dataset may constrain the generalizability of results; class imbalance could influence prediction behavior; and, as with all correlational modeling approaches, the findings do not establish causal relationships.</p>
-<p>Future work could expand on this analysis in several ways. Incorporating larger and more diverse datasets would enable validation across broader populations. Integrating behavioral or longitudinal variables may further enhance predictive performance. Comparative evaluations using alternative models—such as Random Forests, LightGBM, or neural networks—would help determine whether the observed performance is model-specific or consistent across algorithms. In addition, real-world implementation studies are needed to evaluate practical utility and reliability. Ethical considerations, including fairness across demographic groups and responsible handling of personal health data, should remain central to any continued development.</p>
+<p>This study demonstrates that boosted-tree models provide a strong methodological option for mental-health prediction tasks. XGBoost effectively managed data limitations, captured non-linear relationships, and generated interpretable feature importance measures that offer insights into key predictors. Nonetheless, several limitations must be acknowledged. The relatively small dataset may constrain the generalizability of results; class imbalance could influence prediction behavior; and, as with all correlational modeling approaches, the findings do not establish causal relationships.</p>
+<p>Future work could expand on this analysis in several ways. Incorporating larger and more diverse datasets would enable validation across broader populations. Integrating behavioral or longitudinal variables may further enhance predictive performance. Comparative evaluations using alternative models, such as Random Forests, LightGBM, or neural networks, would help determine whether the observed performance is model-specific or consistent across algorithms. In addition, real-world implementation studies are needed to evaluate practical utility and reliability. Ethical considerations, including fairness across demographic groups and responsible handling of personal health data, should remain central to any continued development.</p>
 <p>Overall, this study suggests that XGBoost can be an effective tool for analyzing survey-based mental-health data. Machine-learning approaches may provide timely insights that complement traditional assessment methods and support early identification of individuals who may benefit from targeted intervention. With further refinement and validation, predictive modeling has the potential to become an increasingly valuable component of mental-health research and practice.</p>
 </section>
 </section>

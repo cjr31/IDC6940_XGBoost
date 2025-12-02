@@ -690,6 +690,7 @@ conf_mat(test_results, truth = Expert.Diagnose, estimate = .pred_class) %>%
 
 
 ```{r}
+#| include: false
 # Filter correct probability columns
 true_levels <- levels(train_data$Expert.Diagnose)
 prob_cols <- paste0(".pred_", true_levels)
@@ -704,6 +705,25 @@ roc_auc(test_results, truth = Expert.Diagnose,
 
 ```
 
+```{r}
+
+base_tbl <- metrics(test_results,
+                    truth = Expert.Diagnose,
+                    estimate = .pred_class)
+
+roc_tbl <- roc_auc(test_results,
+                   truth = Expert.Diagnose,
+                   all_of(prob_cols),
+                   estimator = "macro_weighted") %>%
+  mutate(.metric = "roc_auc_macro_weighted")
+
+# Merge Table
+kable(bind_rows(base_tbl, roc_tbl),
+      format = "markdown",
+      caption = "Classification Metrics Including Macro-Weighted ROC AUC",
+      digits = 3)
+
+```
 
 
 
@@ -958,12 +978,16 @@ cv_results <- map_dfr(repeated_folds$splits, function(split) {
 
 cv_results %>%
   summarise(
-    mean_accuracy = mean(accuracy),
-    sd_accuracy   = sd(accuracy),
-    mean_roc      = mean(roc_auc),
-    sd_roc        = sd(roc_auc)
+    Mean_Accuracy = mean(accuracy),
+    SD_Accuracy   = sd(accuracy),
+    Mean_ROC      = mean(roc_auc),
+    SD_ROC        = sd(roc_auc)
+  ) %>%
+  knitr::kable(
+    format = "markdown",
+    caption = "Cross-Validation Performance Summary",
+    digits = 3
   )
-
 
 ```
 
@@ -1062,13 +1086,13 @@ Overall, XGBoost proved to be an effective and interpretable modeling approach f
 
 The purpose of this study was to evaluate the effectiveness of an XGBoost model in predicting mental-health outcomes using a survey-based dataset. By developing, tuning, and validating the model, we examined its ability to identify influential predictive factors and to capture non-linear relationships within mental-health data. Overall, the results indicate that XGBoost performed robustly, demonstrating consistent accuracy across cross-validation folds and strong generalizability relative to baseline methods.
 
-The analysis highlighted several key predictors—particularly self-reported stress indicators, behavioral patterns, and wellness-related factors—as the most influential contributors to model performance. These variables emerged as top-ranking features, suggesting their relevance as potential risk indicators for adverse mental-health outcomes. The model effectively distinguished between outcome classes, and the stability of performance across tuning configurations indicates limited susceptibility to overfitting.
+The analysis highlighted several key predictors, particularly self-reported stress indicators, behavioral patterns, and wellness-related factors, as the most influential contributors to model performance. These variables emerged as top-ranking features, suggesting their relevance as potential risk indicators for adverse mental-health outcomes. The model effectively distinguished between outcome classes, and the stability of performance across tuning configurations indicates limited susceptibility to overfitting.
 
 These findings suggest that machine-learning models such as XGBoost could support early mental-health monitoring efforts, particularly in clinical or screening contexts. A predictive model capable of identifying at-risk individuals through survey responses may augment traditional diagnostic processes. Although self-reported data may introduce bias, the model’s outputs could still serve as a useful complement to clinician judgment when applied with appropriate caution and follow-up procedures.
 
-This study demonstrates that boosted-tree models provide a strong methodological option for mental-health prediction tasks. XGBoost effectively managed data limitations, captured non-linear relationships, and generated interpretable feature-importance measures that offer insights into key predictors. Nonetheless, several limitations must be acknowledged. The relatively small dataset may constrain the generalizability of results; class imbalance could influence prediction behavior; and, as with all correlational modeling approaches, the findings do not establish causal relationships.
+This study demonstrates that boosted-tree models provide a strong methodological option for mental-health prediction tasks. XGBoost effectively managed data limitations, captured non-linear relationships, and generated interpretable feature importance measures that offer insights into key predictors. Nonetheless, several limitations must be acknowledged. The relatively small dataset may constrain the generalizability of results; class imbalance could influence prediction behavior; and, as with all correlational modeling approaches, the findings do not establish causal relationships.
 
-Future work could expand on this analysis in several ways. Incorporating larger and more diverse datasets would enable validation across broader populations. Integrating behavioral or longitudinal variables may further enhance predictive performance. Comparative evaluations using alternative models—such as Random Forests, LightGBM, or neural networks—would help determine whether the observed performance is model-specific or consistent across algorithms. In addition, real-world implementation studies are needed to evaluate practical utility and reliability. Ethical considerations, including fairness across demographic groups and responsible handling of personal health data, should remain central to any continued development.
+Future work could expand on this analysis in several ways. Incorporating larger and more diverse datasets would enable validation across broader populations. Integrating behavioral or longitudinal variables may further enhance predictive performance. Comparative evaluations using alternative models, such as Random Forests, LightGBM, or neural networks, would help determine whether the observed performance is model-specific or consistent across algorithms. In addition, real-world implementation studies are needed to evaluate practical utility and reliability. Ethical considerations, including fairness across demographic groups and responsible handling of personal health data, should remain central to any continued development.
 
 Overall, this study suggests that XGBoost can be an effective tool for analyzing survey-based mental-health data. Machine-learning approaches may provide timely insights that complement traditional assessment methods and support early identification of individuals who may benefit from targeted intervention. With further refinement and validation, predictive modeling has the potential to become an increasingly valuable component of mental-health research and practice.
 
