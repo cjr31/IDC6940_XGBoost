@@ -832,7 +832,7 @@ Together, these metrics indicate a model with strong discriminative potential (a
 - Exploring probability threshold adjustments or calibration  
 - Engineering additional or more informative features to better separate difficult classes  
 
-**In summary**, the XGBoost model shows promising underlying structure with strong class separability. With targeted refinements, its classification reliability can likely be improved substantially.
+**In summary**, the XGBoost model shows promising underlying structure with strong class separability. With targeted refinements, its classification reliability can likely be improved substantially [@Geron2019].
 
 
 
@@ -884,10 +884,10 @@ The SHAP value plot provides insight into how each predictor contributes to the 
 
 A few features show high average absolute SHAP values across multiple classes, indicating broad predictive power:
 
-- **Mood.Swing**  
+- **Mood Swing**  
   This feature exhibits the largest SHAP magnitude overall, particularly for **Bipolar Type-2** and **Bipolar Type-1**. Its prominence suggests that variability in mood plays a central role in distinguishing class patterns.
 
-- **Suicidal.thoughts**  
+- **Suicidal thoughts**  
   This feature contributes heavily, especially for **Depression** and **Bipolar Type-2**, indicating that the presence or intensity of suicidal thoughts is highly informative for separating these groups.
 
 - **Sadness**  
@@ -895,13 +895,13 @@ A few features show high average absolute SHAP values across multiple classes, i
 
 Some predictors exhibit strong influence for specific classes, reflecting how the model uses distinct emotional, cognitive, or behavioral signals:
 
-- **Concentration_Cat.2**  
+- **Concentration Category 2**  
   Particularly influential for **Normal**, implying that concentration-related difficulties help distinguish this class.
 
-- **Authority.Respect**  
+- **Authority & Respect**  
   Most impactful for **Bipolar Type-2**, suggesting that attitudes toward authority meaningfully guide predictions for this group.
 
-- **Ignore...Move.On**  
+- **Ignore & Move.On**  
   Shows notable influence for **Normal**, indicating that coping style differences contribute to distinguishing this class.
 
 - **Exhausted**  
@@ -910,12 +910,12 @@ Some predictors exhibit strong influence for specific classes, reflecting how th
 Several features provide moderate but consistent contributions across classes:
 
 - **Euphoric**  
-- **Nervous.Breakdown**  
-- **Aggressive.Response**  
+- **Nervous Breakdown**  
+- **Aggressive Response**  
 - **Overthinking**  
-- **Sleep.disorder**
+- **Sleep disorder**
 
-While not dominant for any single class, these variables add meaningful nuance to the model’s decision-making.
+While not dominant for any single class, these variables add meaningful nuance to the model’s decision making.
 
 Overall, the SHAP results indicate that the model relies on a multidimensional combination of emotional states (e.g., mood swings, sadness), cognitive patterns (e.g., concentration difficulty, overthinking), and behavioral responses (e.g., coping style, aggression) to differentiate between classes.
 
@@ -938,11 +938,11 @@ For **Bipolar Type-1**, the model predicts a relatively high output value, with 
 
 Key positive contributors include:
 
-- **Mood.Swing = 1** (+1.54)  
+- **Mood Swing = 1** (+1.54)  
 - **Sadness = 1** (+1.50)  
-- **Admit.Mistakes = 0**  
-- **Suicidal.thoughts = 1**  
-- **Authority.Respect = 0**
+- **Admit Mistakes = 0**  
+- **Suicidal thoughts = 1**  
+- **Authority & Respect = 0**
 
 These features collectively push the prediction upward, suggesting that emotional variability, sadness, and the presence of suicidal thoughts are among the strongest drivers toward this class in this specific observation. Minor negative contributions appear (e.g., Sleep.disorder = 3), but the dominant pattern is positive.
 
@@ -952,17 +952,17 @@ For **Bipolar Type-2**, the final predicted score \(f(x) = 1.11\) is lower than 
 
 Major **positive** contributions:
 
-- **Suicidal.thoughts = 1** (+1.66)  
-- **Mood.Swing = 1** (+1.33)  
+- **Suicidal thoughts = 1** (+1.66)  
+- **Mood Swing = 1** (+1.33)  
 
 Major **negative** contributions:
 
 - **Sadness = 1** (–1.24)  
-- **Authority.Respect = 0** (–0.91)  
-- **Concentration_Cat.2 = 1** (–0.82)  
-- **Try.Explanation = 1** (–0.79)  
-- **Nervous.Breakdown = 1** (–0.77)  
-- **Admit.Mistakes = 0** (–0.70)
+- **Authority & Respect = 0** (–0.91)  
+- **Concentration Category 2 = 1** (–0.82)  
+- **Try Explanation = 1** (–0.79)  
+- **Nervous Breakdown = 1** (–0.77)  
+- **Admit Mistakes = 0** (–0.70)
 
 Although there are strong positive drivers, they are outweighed by multiple negative influences. This results in a net downward movement from the class baseline, indicating that **Bipolar Type-2 is not well supported** for this observation relative to Bipolar Type-1.
 
@@ -971,16 +971,18 @@ The **Depression** prediction moves from a baseline of \(E[f(x)] = 1.11\) to a f
 Key contributions include:
 
 Positive:
-- **Suicidal.thoughts = 1** (+1.94)
+
+- **Suicidal thoughts = 1** (+1.94)
 
 Negative:
+
 - **Sadness = 1** (–0.96)  
 - **Euphoric = 2** (–0.95)  
-- **Concentration_Cat.2 = 1** (–0.90)  
-- **Mood.Swing = 1** (–0.90)  
-- **Optimism_Cat.2 = 0** (–0.81)  
+- **Concentration Category 2 = 1** (–0.90)  
+- **Mood Swing = 1** (–0.90)  
+- **Optimism Category 2 = 0** (–0.81)  
 - **Anorexia = 1** (–0.71)  
-- **Admit.Mistakes = 0** (–0.64)
+- **Admit Mistakes = 0** (–0.64)
 
 The single strong positive contribution is overwhelmed by numerous moderately sized negatives. This creates a consistent downward trajectory, showing that the feature profile **does not align well with the Depression pattern**.
 
@@ -989,23 +991,25 @@ The prediction for **Normal** moves from a baseline of \(E[f(x)] = 0.174\) up to
 Key contributions:
 
 Positive:
-- **Ignore...Move.On = 0**  
-- **Try.Explanation = 1**  
-- **Optimism_Cat.2 = 0** (+0.56)  
+
+- **Ignore & Move.On = 0**  
+- **Try Explanation = 1**  
+- **Optimism Category 2 = 0** (+0.56)  
 - **Sadness = 1** (+0.51)
 
 Negative:
-- **Mood.Swing = 1** (–1.43)  
-- **Euphoric = 2** (–0.77)  
-- **Sleep.disorder = 3** (–0.49)
 
-Despite some significant negative pushes—particularly from Mood.Swing—the positive contributions collectively outweigh them, resulting in a moderate upward shift.
+- **Mood Swing = 1** (–1.43)  
+- **Euphoric = 2** (–0.77)  
+- **Sleep disorder = 3** (–0.49)
+
+Despite some significant negative pushes particularly from Mood.Swing, the positive contributions collectively outweigh them, resulting in a moderate upward shift.
 
 Across all four classes, the waterfall charts highlight:
 
 - **Bipolar Type-1 and Normal receive positive net support**, with Bipolar Type-1 showing the strongest alignment.  
 - **Bipolar Type-2 and Depression predictions decline from their baselines**, indicating weaker support relative to other classes.  
-- Emotional and cognitive features such as **Mood Swing, Sadness, Suicidal Thoughts, Concentration issues, and coping styles** consistently emerge as major contributors—though with different directions depending on the class.  
+- Emotional and cognitive features such as **Mood Swing, Sadness, Suicidal Thoughts, Concentration issues, and coping styles** consistently emerge as major contributors, though with different directions depending on the class.  
 - The model distinguishes classes by the *pattern* of contributions rather than reliance on any single feature.
 
 These charts provide a transparent view of how individual feature values shape the model’s decision structure for each class.
@@ -1093,7 +1097,7 @@ These results show that:
 - Variability across repeats is **low to moderate**, supporting the model’s robustness.  
 - The model’s **ability to rank or distinguish classes** (ROC AUC) is especially stable, while accuracy shows slightly more sensitivity to data shifts.
 
-In summary, the sensitivity and robustness metrics indicate that the model behaves **consistently across perturbations**, with high performance and acceptable variability. This supports confidence in the model’s generalizability and stability for practical use.
+In summary, the sensitivity and robustness metrics indicate that the model behaves **consistently across perturbations**, with high performance and acceptable variability. This supports confidence in the model’s generalizability and stability for practical use [@Geron2019].
 
 
 
@@ -1120,9 +1124,12 @@ Across all resampled evaluations during tuning, the model achieved:
 
 - **Accuracy:** 0.654  
 - **Kappa:** 0.534  
-- **Macro-weighted ROC AUC:** 0.927  
+- **Macro-weighted ROC AUC:** 0.927 
+- **Precision: 0.673** 
+- **Recall: 0.643** 
+- **F1-Score: 0.636**
 
-The high ROC AUC indicates excellent discriminative ability, while the moderate accuracy and kappa reflect the inherent difficulty of separating four mental health classes with overlapping symptom profiles.
+The high ROC AUC indicates excellent discriminative ability, while the moderate accuracy, kappa, precision, recall, and F1 scores reflect the inherent difficulty of separating four mental health classes with overlapping symptom profiles.
 
 Further resampling-based sensitivity analysis confirmed that the model’s performance is stable:
 
