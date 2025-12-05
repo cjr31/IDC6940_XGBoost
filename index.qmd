@@ -707,24 +707,93 @@ roc_auc(test_results, truth = Expert.Diagnose,
 
 ```{r}
 
-base_tbl <- metrics(test_results,
-                    truth = Expert.Diagnose,
-                    estimate = .pred_class)
+# Base metrics
+base_tbl <- metrics(
+  test_results,
+  truth = Expert.Diagnose,
+  estimate = .pred_class
+)
 
-roc_tbl <- roc_auc(test_results,
-                   truth = Expert.Diagnose,
-                   all_of(prob_cols),
-                   estimator = "macro_weighted") %>%
+# Add macro-weighted ROC AUC
+roc_tbl <- roc_auc(
+  test_results,
+  truth = Expert.Diagnose,
+  all_of(prob_cols),
+  estimator = "macro_weighted"
+) %>%
   mutate(.metric = "roc_auc_macro_weighted")
 
-# Merge Table
-kable(bind_rows(base_tbl, roc_tbl),
-      format = "markdown",
-      caption = "Classification Metrics Including Macro-Weighted ROC AUC",
-      digits = 3)
+# Combine & format wide
+metrics_wide <- bind_rows(base_tbl, roc_tbl) %>%
+  select(.metric, .estimate) %>%
+  pivot_wider(
+    names_from = .metric,
+    values_from = .estimate
+  ) %>%
+  mutate(Class = "overall") %>%      
+  select(Class, everything()) %>%
+  mutate(across(-Class, round, 3))
+
+# Output Table
+kable(
+  metrics_wide,
+  format = "markdown",
+  caption = "Overall Classification Metrics",
+  digits = 3
+)
+
 
 ```
 
+```{r}
+
+# Compute per-class precision, recall, F1
+prf_table <- list(
+  precision = precision(test_results, truth = Expert.Diagnose, estimate = .pred_class),
+  recall    = recall(test_results, truth = Expert.Diagnose, estimate = .pred_class),
+  f1        = f_meas(test_results, truth = Expert.Diagnose, estimate = .pred_class)
+) %>%
+  bind_rows() %>%
+  select(Class = .estimator, Metric = .metric, Estimate = .estimate) %>%
+  mutate(Estimate = round(Estimate, 3)) %>%
+  pivot_wider(
+    names_from = Metric,
+    values_from = Estimate
+  )
+
+# Produce table
+gt_prf <- prf_table %>%
+  gt() %>%
+  tab_header(
+    title = "Classification Performance by Class",
+    subtitle = "Precision, Recall, and F1-Score for Final Model"
+  ) %>%
+  cols_label(
+    Class = "Class",
+    precision = "Precision",
+    recall = "Recall",
+    f_meas = "F1-Score"
+  ) %>%
+  tab_options(
+    table.font.size = 14,
+    heading.title.font.size = 16,
+    heading.subtitle.font.size = 14,
+    table.width = pct(80),
+    data_row.padding = px(4)
+  ) %>%
+  fmt_number(
+    columns = c(precision, recall, f_meas),
+    decimals = 3
+  ) %>%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels()
+  )
+
+gt_prf
+
+
+```
 
 
 ```{r}
@@ -734,25 +803,37 @@ roc_curve(test_results, truth = Expert.Diagnose, all_of(prob_cols)) %>%
 
 ```
 
-The XGBoost multiclass classification model demonstrates **moderate overall predictive performance**, with room for improvement but also several encouraging indicators of discriminative ability.
 
-- **Accuracy:** 0.654  
-  An accuracy of **65.4%** suggests that the model correctly classifies roughly two-thirds of the observations. While acceptable depending on the problem context and class complexity, this level indicates that the model may still struggle with certain classes or nuanced decision boundaries.
+The XGBoost multiclass classification model demonstrates moderate overall predictive performance, with several indicators of strong underlying discriminative ability.
 
-- **Kappa:** 0.534  
-  The Kappa value of **0.534** reflects **moderate agreement** between the model’s predictions and the true class labels after accounting for chance. This reinforces the message from accuracy: the model is performing meaningfully better than random guessing but is not yet achieving strong or near-perfect classification consistency.
+- **Accuracy 0.654**  
+The model correctly classifies approximately two-thirds of observations. While this level of accuracy may be acceptable given the complexity of the four-class classification task, it also suggests that certain classes remain challenging to distinguish.
 
-- **ROC AUC (macro-weighted):** 0.927  
-  The macro-weighted ROC AUC of **0.927** is notably high. This suggests that the model does a strong job of ranking observations correctly across all classes, even if it occasionally makes incorrect final class assignments. High AUC with moderate accuracy often indicates good separability between classes but potential issues with thresholding, class imbalance, or misclassification among a subset of similar classes.
+- **Kappa 0.534**  
+A Cohen’s Kappa value of 0.534 indicates moderate agreement beyond chance. This reinforces the conclusion that, although the model performs meaningfully better than random guessing, its class-level consistency is not yet high.
 
-Taken together, the metrics indicate that the model has **strong underlying discriminative power (high AUC)** but **moderate final classification performance (accuracy and kappa)**. This pattern often suggests opportunities for improvement through:
+- **Macro-Weighted ROC AUC 0.927**  
+The macro-weighted AUC score of 0.927 is notably strong. This indicates that the model ranks observations from different classes correctly with high reliability. The contrast between high AUC and moderate accuracy suggests that the model achieves good separability between classes but may struggle with final decision boundaries—often due to class imbalance, overlapping features, or suboptimal thresholding.
 
-- Better class weighting or resampling if class imbalance is present  
-- Hyperparameter tuning, especially around learning rate, tree depth, and regularization  
-- Refinement of decision thresholds or calibration  
-- Feature engineering to improve separation where misclassifications are common
+**Macro Precision, Recall, and F1-Score**  
+Class-aggregated performance metrics provide additional insight into class-level behavior:
 
-In summary, the XGBoost model shows **solid potential with strong class separability**, and with targeted improvements, it may achieve significantly higher classification reliability.
+- **Precision: 0.673**  
+  Indicates that when the model predicts a given class, it is correct roughly 67% of the time.  
+- **Recall: 0.643**  
+  Shows the model retrieves approximately 64% of true class instances, reflecting missed detections in some classes.  
+- **F1-Score: 0.636**  
+  The combined harmonic mean of precision and recall underscores balanced but moderate performance across classes.
+
+Together, these metrics indicate a model with strong discriminative potential (as reflected in the high AUC) but only moderate classification accuracy and balance (as shown by the precision, recall, and F1 scores). This performance pattern suggests several avenues for improvement, including:
+
+- Adjusting class weights or applying resampling if class imbalance affects learning  
+- Hyperparameter tuning (e.g., learning rate, tree depth, regularization parameters)  
+- Exploring probability threshold adjustments or calibration  
+- Engineering additional or more informative features to better separate difficult classes  
+
+**In summary**, the XGBoost model shows promising underlying structure with strong class separability. With targeted refinements, its classification reliability can likely be improved substantially.
+
 
 
 ##### Feature Importance & Interepretability
