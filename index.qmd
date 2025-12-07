@@ -211,6 +211,7 @@ kable(table1, format = "html", table.attr = "style='width:100%;'")  # for HTML o
 
 
 ```
+**Table 1.** Variable names and descriptions
 
 ##### Initial Data Exploration
 
@@ -249,7 +250,7 @@ ggplot(long_data, aes(x = Response, fill = Variable)) +
 
 ```
 
-In **Figure** 2, the data appears to be normally distributed across the three variables, concetration, opitimism, and sexual activity which were all rated from 1 to 10 from the 120 patients.
+In **Figure** 2, the data appears to be normally distributed across the three variables, concentration, opitimism, and sexual activity which were all rated from 1 to 10 from the 120 patients.
 
 ```{r}
 #| echo: false
@@ -570,6 +571,8 @@ Hyperparameter tuning was performed using 5-fold stratified cross-validation wit
 # Visualize tuning results
 autoplot(xgb_tune_results)
 ```
+**Figure 5.** Accuracy and ROC curve for 5-fold stratified cross-validation
+
 ```{r}
 tune_df <- collect_metrics(xgb_tune_results)
 
@@ -586,7 +589,9 @@ ggplot(tune_df, aes(x = trees, y = mean, color = factor(tree_depth))) +
   theme_minimal()
 
 ```
-Visualizing the tuning results revealed clear performance patterns across the explored hyperparameter space. The ROC AUC versus number of trees plot indicated that the optimal tree depth was approximately 2, suggesting that relatively shallow trees generalized best for this dataset. Model performance increased steadily with the number of boosting iterations, with the highest ROC AUC occurring at around 625 trees. At this configuration, the model achieved an accuracy exceeding 0.80 and a ROC AUC greater than 0.90, indicating strong discriminatory performance.
+**Figure 6.** ROC-AUC versus Number of trees plot
+
+Visualizing the tuning results revealed clear performance patterns across the explored hyperparameter space. The **Figure 6** indicated that the optimal tree depth was approximately 2, suggesting that relatively shallow trees generalized best for this dataset. Model performance increased steadily with the number of boosting iterations, with the highest ROC AUC occurring at around 625 trees. At this configuration, the model achieved an accuracy exceeding 0.80 and a ROC AUC greater than 0.90, indicating strong discriminatory performance.
 
 ```{r}
 # Selecting best parameters
@@ -622,8 +627,9 @@ best_params_table %>%
   )
 
 ```
+**Table 3.** Best hyperparameter combination based on ROC AUC
 
-Although visual inspection of the tuning plots provided a general sense of the model’s performance trends, identifying the exact optimal hyperparameters was not straightforward due to interaction effects between parameters and the non-linear nature of boosted tree models. Therefore, the select_best() function from the tidymodels framework was used to systematically extract the hyperparameter combination that achieved the highest ROC AUC across all resampled evaluations.
+Although visual inspection of the tuning plots provided a general sense of the model’s performance trends, identifying the exact optimal hyperparameters was not straightforward due to interaction effects between parameters and the non-linear nature of boosted tree models. Therefore, the select_best() function from the tidymodels framework was used to systematically extract the hyperparameter combination that achieved the highest ROC AUC across all resampled evaluations shown in **Table 3**.
 
 The resulting optimal configuration included 3 predictors (mtry = 3), 627 boosting iterations, a minimum node size (min_n) of 2, a learning rate of 0.16501, a loss-reduction parameter of 0.0034, and a subsample proportion of 0.5655. This combination represents the tuning grid entry labeled pre0_mod06_post0, which achieved the best balance between model complexity and predictive performance during cross-validation.
 
@@ -642,7 +648,9 @@ final_fit <- fit(final_xgb, data = train_data)
 vip(final_fit$fit$fit, geom = "col")
 
 ```
-Using the best parameter fit the has the top five features in order of importance as mood swings, sadness, agressive response, exhausted, and euphoric.
+**Figure 7.** Top 5 features using the best parameter fit
+
+Using the best parameter fit the model has the top five features in order of importance as mood swings, sadness, agressive response, exhausted, and euphoric as shown in **Figure 7**.
 
 ```{r}
 #Prediction Visualization
@@ -657,7 +665,9 @@ ggplot(preds2, aes(x = factor(.pred_class), fill = factor(Expert.Diagnose))) +
   theme_minimal()
 
 ```
-The model's predictions on the held-out test set showed strong agreement with the expert diagnoses. Specifically:
+**Figure 8.** Model's Predictions on the test set
+
+In **Figure 8** the model's predictions on the held-out test set show strong agreement with the expert diagnoses. Specifically:
 
 - **Bipolar Type-1:** 4 of 6 cases were correctly predicted (66.7%)  
 - **Bipolar Type-2:** 5 of 7 cases were correctly predicted (71.4%)  
@@ -687,7 +697,7 @@ test_results <- predict(final_fit, test_data) %>%
 conf_mat(test_results, truth = Expert.Diagnose, estimate = .pred_class) %>%
   autoplot(type = "heatmap")
 ```
-
+**Figure 9.** Confusion Matrix
 
 ```{r}
 #| include: false
@@ -744,6 +754,7 @@ kable(
 
 
 ```
+**Table 4.** Overall Classification Metrics
 
 ```{r}
 
@@ -794,7 +805,7 @@ gt_prf
 
 
 ```
-
+**Table 5.**Classification performance by class
 
 ```{r}
 # ROC Curve (macro average)
@@ -802,9 +813,9 @@ roc_curve(test_results, truth = Expert.Diagnose, all_of(prob_cols)) %>%
   autoplot()
 
 ```
+**Figure 10.** Specificity Vs Sensitivity for each class
 
-
-The XGBoost multiclass classification model demonstrates moderate overall predictive performance, with several indicators of strong underlying discriminative ability.
+The XGBoost multiclass classification models demonstrates moderate overall predictive performance, with several indicators of strong underlying discriminative ability as shown in **Table 4**.
 
 - **Accuracy 0.654**  
 The model correctly classifies approximately two-thirds of observations. While this level of accuracy may be acceptable given the complexity of the four-class classification task, it also suggests that certain classes remain challenging to distinguish.
@@ -816,7 +827,7 @@ A Cohen’s Kappa value of 0.534 indicates moderate agreement beyond chance. Thi
 The macro-weighted AUC score of 0.927 is notably strong. This indicates that the model ranks observations from different classes correctly with high reliability. The contrast between high AUC and moderate accuracy suggests that the model achieves good separability between classes but may struggle with final decision boundaries—often due to class imbalance, overlapping features, or suboptimal thresholding.
 
 **Macro Precision, Recall, and F1-Score**  
-Class-aggregated performance metrics provide additional insight into class-level behavior:
+Class-aggregated performance metrics in **Table 5** provide additional insight into class-level behavior:
 
 - **Precision: 0.673**  
   Indicates that when the model predicts a given class, it is correct roughly 67% of the time.  
@@ -879,8 +890,9 @@ sv_importance <- sv_importance(sv)
 sv_importance
 
 ```
+**Figure 11.** SHAP value plot
 
-The SHAP value plot provides insight into how each predictor contributes to the classification decisions across the four classes. Several features emerge as consistently influential, though the degree of influence varies across classes, highlighting class-specific behavioral and emotional markers within the model.
+The SHAP value plot in **Figure 11** provides insight into how each predictor contributes to the classification decisions across the four classes. Several features emerge as consistently influential, though the degree of influence varies across classes, highlighting class-specific behavioral and emotional markers within the model.
 
 A few features show high average absolute SHAP values across multiple classes, indicating broad predictive power:
 
@@ -930,9 +942,9 @@ i <- 1
 sv_waterfall(sv, row_index = i)
 
 ```
+**Figure 12.** SHAP profile across classes
 
-
-The SHAP waterfall charts illustrate how individual feature values contribute to the predicted score for each class by showing how the model moves from the baseline expectation \(E[f(x)]\) to the final class-specific output \(f(x)\). These plots highlight the most influential features driving the model’s decision for each class.
+The SHAP waterfall charts in **Figure 12** illustrate how individual feature values contribute to the predicted score for each class by showing how the model moves from the baseline expectation \(E[f(x)]\) to the final class-specific output \(f(x)\). These plots highlight the most influential features driving the model’s decision for each class.
 
 For **Bipolar Type-1**, the model predicts a relatively high output value, with the final prediction rising substantially above the baseline \(E[f(x)] = 1.01\). This indicates strong support in favor of Bipolar Type-1 (Class_1) for this instance.
 
@@ -1075,9 +1087,9 @@ cv_results %>%
   )
 
 ```
+**Table 6.**Cross Validation performance summary
 
-
-The sensitivity analysis results indicate that the model performs **consistently and reliably** across repeated resampling or perturbation scenarios. The metrics summarize how stable the model's performance remains when exposed to variability in the input data.
+The sensitivity analysis results in **Table 6** indicate that the model performs **consistently and reliably** across repeated resampling or perturbation scenarios. The metrics summarize how stable the model's performance remains when exposed to variability in the input data.
 
 - **Mean Accuracy:** 0.804  
 - **SD of Accuracy:** 0.0821  

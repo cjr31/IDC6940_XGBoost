@@ -320,7 +320,7 @@ The model's predictions on the held-out test set showed strong agreement with th
 
 ## Conclusion: Overview {.smaller}
 
-- Overall, XGBoost proved to be an effective and interpretable modeling approach for mental health classification in a small structured dataset, delivering both predictive value and meaningful interpretability essential for clinical research. Our XGBoost Model performed with 88% accuracy. Machine-learning approaches may provide timely insights that complement traditional assessment methods and support early identification of individuals who may benefit from targeted intervention. With further refinement and validation, predictive modeling has the potential to become an increasingly valuable component of mental-health research and practice.
+- Overall, XGBoost proved to be an effective and interpretable modeling approach for mental health classification in a small structured dataset, delivering both predictive value and meaningful interpretability essential for clinical research. Machine-learning approaches may provide timely insights that complement traditional assessment methods and support early identification of individuals who may benefit from targeted intervention. With further refinement and validation, predictive modeling has the potential to become an increasingly valuable component of mental-health research and practice.
 
 
 ## References
